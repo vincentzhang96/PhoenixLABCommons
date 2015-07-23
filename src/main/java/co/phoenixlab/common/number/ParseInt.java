@@ -91,7 +91,7 @@ public class ParseInt {
         int placeVal = 1;
         //  Read the number from right to left (smallest place to largest)
         //  WARNING: NO UNDER/OVERFLOW CHECKING IS DONE
-        for (int i = length - 1; i >= startPos; i++) {
+        for (int i = length - 1; i >= startPos; i--) {
             ret += Digit.decDigit(chars[i]) * placeVal;
             placeVal *= 10;
         }
