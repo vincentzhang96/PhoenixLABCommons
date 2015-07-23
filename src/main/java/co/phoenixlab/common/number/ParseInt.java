@@ -33,7 +33,13 @@ public class ParseInt {
         //  Directly call parseDec0/parseHex0 since we don't want to duplicate checks
         s = s.trim().toUpperCase();
         char[] chars = s.toCharArray();
+        if (chars.length == 0) {
+            throw new NumberFormatException("empty string");
+        }
         if (s.startsWith(HEX_PREFIX)) {
+            if (chars.length == 2) {
+                throw new NumberFormatException("missing hex digits");
+            }
             return parseHex0(chars, HEX_PREFIX_LEN);
         } else {
             return parseDec0(chars);
@@ -53,7 +59,11 @@ public class ParseInt {
         if (s == null) {
             throw new NumberFormatException("null");
         }
-        return parseDec0(s.toLowerCase().trim().toCharArray());
+        char[] chars = s.toLowerCase().trim().toCharArray();
+        if (chars.length == 0) {
+            throw new NumberFormatException("empty string");
+        }
+        return parseDec0(chars);
     }
 
     /**
@@ -69,9 +79,6 @@ public class ParseInt {
      */
     public static int parseDec0(char[] chars) throws NumberFormatException {
         int length = chars.length;
-        if (length == 0) {
-            throw new NumberFormatException("empty string");
-        }
         int startPos = 0;
         int neg = 1;
         if (chars[0] == '-') {
@@ -108,6 +115,10 @@ public class ParseInt {
         int start = 0;
         if (s.startsWith(HEX_PREFIX)) {
             start = HEX_PREFIX_LEN;
+        }
+        char[] chars = s.toCharArray();
+        if (chars.length == start) {
+            throw new NumberFormatException("missing hex digits");
         }
         return parseHex0(s.toCharArray(), start);
     }
