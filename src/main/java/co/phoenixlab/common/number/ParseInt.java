@@ -135,8 +135,14 @@ public class ParseInt {
      * @throws NumberFormatException If the chars do not represent a valid sequence of hexadecimal digits
      */
     public static int parseHex0(char[] chars, int start) throws NumberFormatException {
-        //  TODO
-        return 0;
+        int length = chars.length;
+        int ret = 0;
+        //  Read the number from right to left (smallest place to largest)
+        //  WARNING: NO UNDER/OVERFLOW CHECKING IS DONE
+        for (int i = length - 1; i >= start; i--) {
+            ret += Digit.hexDigit(chars[i]) << ((length - 1 - i) * 4);
+        }
+        return ret;
     }
 
     /**
