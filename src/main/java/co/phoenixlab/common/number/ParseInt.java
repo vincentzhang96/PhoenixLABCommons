@@ -15,6 +15,7 @@ public class ParseInt {
         if (s == null) {
             throw new NumberFormatException("null");
         }
+        //  Directly call parseDec0/parseHex0 since we don't want to duplicate checks
         s = s.trim().toUpperCase();
         char[] chars = s.toCharArray();
         if (s.startsWith(HEX_PREFIX)) {
@@ -32,8 +33,27 @@ public class ParseInt {
     }
 
     public static int parseDec0(char[] chars) throws NumberFormatException {
-        //  TODO
-        return 0;
+        if (chars.length == 0) {
+            throw new NumberFormatException("empty string");
+        }
+        int startPos = 0;
+        int neg = 1;
+        if (chars[0] == '-') {
+            neg = -1;
+            startPos = 1;
+        } else if (chars[0] == '+') {
+            startPos = 1;
+        }
+        int ret = 0;
+        int length = chars.length;
+        int placeVal = 1;
+        //  Read the number from right to left (smallest place to largest)
+        //  WARNING: NO UNDER/OVERFLOW CHECKING IS DONE
+        for (int i = length - 1; i >= startPos; i++) {
+            ret += Digit.decDigit(chars[i]) * placeVal;
+            placeVal *= 10;
+        }
+        return ret * neg;
     }
 
     public static int parseHex(String s) throws NumberFormatException {
