@@ -33,7 +33,8 @@ public class ParseInt {
     }
 
     public static int parseDec0(char[] chars) throws NumberFormatException {
-        if (chars.length == 0) {
+        int length = chars.length;
+        if (length == 0) {
             throw new NumberFormatException("empty string");
         }
         int startPos = 0;
@@ -45,7 +46,6 @@ public class ParseInt {
             startPos = 1;
         }
         int ret = 0;
-        int length = chars.length;
         int placeVal = 1;
         //  Read the number from right to left (smallest place to largest)
         //  WARNING: NO UNDER/OVERFLOW CHECKING IS DONE
