@@ -118,20 +118,90 @@ public class ParseIntTest {
         ParseInt.parseDec("+12+34");
     }
 
-    @Test
-    public void testParseDec0() throws Exception {
+    //  parseDec0() is technically internal and makes no public guarantees besides declaring what it accepts.
+    //  It is fully tested by parseDec()'s tests
 
+    @Test
+     public void testParseHex() throws Exception {
+        int i = 123456;
+        String s = Integer.toHexString(i);
+        assertEquals(i, ParseInt.parseHex(s));
     }
 
     @Test
-    public void testParseHex() throws Exception {
-
+    public void testParseHexPrefixEquals() throws Exception {
+        int i = 123456;
+        String s = Integer.toHexString(i);
+        String s1 = "0x" + s;
+        String s2 = "0X" + s;
+        //  Transitive property means we only have to test twice
+        assertEquals(ParseInt.parseHex(s), ParseInt.parseHex(s1));
+        assertEquals(ParseInt.parseHex(s1), ParseInt.parseHex(s2));
     }
 
     @Test
-    public void testParseHex0() throws Exception {
-
+    public void testParseHexMax() throws Exception {
+        int i = 0xFFFFFFFF;
+        String s = "0xFFFFFFFF";
+        assertEquals(i, ParseInt.parseHex(s));
     }
+
+    //  Test negative sign prefix reject (before prefix)
+    @Test(expected = NumberFormatException.class)
+    public void testParseHex_Negative1() throws Exception {
+        String s = "-0x12AC";
+        ParseInt.parseHex(s);
+    }
+
+    //  Test negative sign prefix reject (after prefix)
+    @Test(expected = NumberFormatException.class)
+    public void testParseHex_Negative2() throws Exception {
+        String s = "0x-12AC";
+        ParseInt.parseHex(s);
+    }
+
+    //  Test negative sign prefix reject (no prefix)
+    @Test(expected = NumberFormatException.class)
+    public void testParseHex_Negative3() throws Exception {
+        String s = "-12AC";
+        ParseInt.parseHex(s);
+    }
+
+    //  Test bad
+    @Test(expected = NumberFormatException.class)
+    public void testParseHex_Bad() throws Exception {
+        ParseInt.parseHex("12AB-**&1'");
+    }
+
+    //  Test null
+    @Test(expected = NumberFormatException.class)
+    public void testParseHex_Null() throws Exception {
+        ParseInt.parseHex(null);
+    }
+
+    //  Test positive sign prefix reject (before prefix)
+    @Test(expected = NumberFormatException.class)
+    public void testParseHex_Positive1() throws Exception {
+        String s = "+0x12AB";
+        ParseInt.parseHex(s);
+    }
+
+    //  Test positive sign prefix reject (after prefix)
+    @Test(expected = NumberFormatException.class)
+    public void testParseHex_Positive2() throws Exception {
+        String s = "0x+12AB";
+        ParseInt.parseHex(s);
+    }
+
+    //  Test positive sign prefix reject (no prefix)
+    @Test(expected = NumberFormatException.class)
+    public void testParseHex_Positive3() throws Exception {
+        String s = "+12AB";
+        ParseInt.parseHex(s);
+    }
+
+    //  parseHex0() is technically internal and makes no public guarantees besides declaring what it accepts.
+    //  It is fully tested by parseHex()'s tests
 
     @Test
     public void testParseOrDefault() throws Exception {
