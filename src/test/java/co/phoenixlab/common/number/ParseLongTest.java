@@ -106,7 +106,7 @@ public class ParseLongTest {
     //  garbage result
     @Test
     public void testParseDec_UnsignedOverflow() throws Exception {
-        String s = "9223372036854775808";
+        String s = "18446744073709551616";
         ParseLong.parseDec(s);
     }
 
