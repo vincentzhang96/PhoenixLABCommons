@@ -2,6 +2,8 @@ package co.phoenixlab.common.number;
 
 import org.junit.*;
 
+import java.util.OptionalInt;
+
 import static org.junit.Assert.*;
 
 public class ParseIntTest {
@@ -343,17 +345,84 @@ public class ParseIntTest {
 
 
     @Test
-    public void testParseOptional() throws Exception {
-
+    public void testParseOptionalDecOk() throws Exception {
+        int i = 14;
+        String s = Integer.toString(i);
+        OptionalInt ret = ParseInt.parseOptional(s);
+        assertTrue(ret.isPresent());
+        assertEquals(i, ret.getAsInt());
     }
 
     @Test
-    public void testParseDecOptional() throws Exception {
-
+    public void testParseOptionalHexOk() throws Exception {
+        int i = 0x14;
+        String s = "0x" + Integer.toHexString(i);
+        OptionalInt ret = ParseInt.parseOptional(s);
+        assertTrue(ret.isPresent());
+        assertEquals(i, ret.getAsInt());
     }
 
     @Test
-    public void testParseHexOptional() throws Exception {
+    public void testParseOptionalDecFail() throws Exception {
+        String s = "12akjhsdr?";
+        OptionalInt ret = ParseInt.parseOptional(s);
+        assertFalse(ret.isPresent());
+    }
 
+    @Test
+    public void testParseOptionalHexFail() throws Exception {
+        String s = "0x12akjhsdr?";
+        OptionalInt ret = ParseInt.parseOptional(s);
+        assertFalse(ret.isPresent());
+    }
+
+    @Test
+    public void testParseOptionalNullFail() throws Exception {
+        OptionalInt ret = ParseInt.parseOptional(null);
+        assertFalse(ret.isPresent());
+    }
+
+    @Test
+    public void testParseDecOptionalOk() throws Exception {
+        int i = 14;
+        String s = Integer.toString(i);
+        OptionalInt ret = ParseInt.parseDecOptional(s);
+        assertTrue(ret.isPresent());
+        assertEquals(i, ret.getAsInt());
+    }
+
+    @Test
+    public void testParseDecOptionalFail() throws Exception {
+        String s = "astg2148465klkast12hkls";
+        OptionalInt ret = ParseInt.parseDecOptional(s);
+        assertFalse(ret.isPresent());
+    }
+
+    @Test
+    public void testParseDecOptionalNull() throws Exception {
+        OptionalInt ret = ParseInt.parseDecOptional(null);
+        assertFalse(ret.isPresent());
+    }
+
+    @Test
+    public void testParseHexOptionalOk() throws Exception {
+        int i = 0x14;
+        String s = Integer.toHexString(i);
+        OptionalInt ret = ParseInt.parseHexOptional(s);
+        assertTrue(ret.isPresent());
+        assertEquals(i, ret.getAsInt());
+    }
+
+    @Test
+    public void testParseHexOptionalFail() throws Exception {
+        String s = "astg2148465klkast12hkls";
+        OptionalInt ret = ParseInt.parseHexOptional(s);
+        assertFalse(ret.isPresent());
+    }
+
+    @Test
+    public void testParseHexOptionalNull() throws Exception {
+        OptionalInt ret = ParseInt.parseHexOptional(null);
+        assertFalse(ret.isPresent());
     }
 }
