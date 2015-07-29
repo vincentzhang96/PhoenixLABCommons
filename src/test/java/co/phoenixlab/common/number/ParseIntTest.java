@@ -264,19 +264,83 @@ public class ParseIntTest {
     //  It is fully tested by parseHex()'s tests
 
     @Test
-    public void testParseOrDefault() throws Exception {
-
+    public void testParseOrDefaultDecOk() throws Exception {
+        int i = 12;
+        String s = Integer.toString(i);
+        int def = 14;
+        assertEquals(i, ParseInt.parseOrDefault(s, def));
     }
 
     @Test
-    public void testParseDecOrDefault() throws Exception {
-
+    public void testParseOrDefaultHexOk() throws Exception {
+        int i = 0x12;
+        String s = "0x" + Integer.toHexString(i);
+        int def = 14;
+        assertEquals(i, ParseInt.parseOrDefault(s, def));
     }
 
     @Test
-    public void testParseHexOrDefault() throws Exception {
-
+    public void testParseOrDefaultDecDefault() throws Exception {
+        String s = "abcd";
+        int def = 14;
+        assertEquals(def, ParseInt.parseOrDefault(s, def));
     }
+
+    @Test
+    public void testParseOrDefaultHexDefault() throws Exception {
+        String s = "0xq12.g";
+        int def = 14;
+        assertEquals(def, ParseInt.parseOrDefault(s, def));
+    }
+
+    @Test
+    public void testParseOrDefaultNullDefault() throws Exception {
+        int def = 14;
+        assertEquals(def, ParseInt.parseOrDefault(null, def));
+    }
+
+    @Test
+    public void testParseDecOrDefaultOk() throws Exception {
+        int i = 12;
+        String s = Integer.toString(i);
+        int def = 14;
+        assertEquals(i, ParseInt.parseDecOrDefault(s, def));
+    }
+
+    @Test
+    public void testParseDecOrDefaultFail() throws Exception {
+        String s = "abc";
+        int def = 14;
+        assertEquals(def, ParseInt.parseDecOrDefault(s, def));
+    }
+
+    @Test
+    public void testParseDecOrDefaultNull() throws Exception {
+        int def = 14;
+        assertEquals(def, ParseInt.parseDecOrDefault(null, def));
+    }
+
+    @Test
+    public void testParseHexOrDefaultOk() throws Exception {
+        int i = 0x12;
+        String s = "0x" + Integer.toHexString(i);
+        int def = 14;
+        assertEquals(i, ParseInt.parseHexOrDefault(s, def));
+    }
+
+    @Test
+    public void testParseHexOrDefaultFail() throws Exception {
+        String s = "aq12.g";
+        int def = 14;
+        assertEquals(def, ParseInt.parseHexOrDefault(s, def));
+    }
+
+    @Test
+    public void testParseHexOrDefaultNull() throws Exception {
+        int def = 14;
+        assertEquals(def, ParseInt.parseHexOrDefault(null, def));
+    }
+
 
     @Test
     public void testParseOptional() throws Exception {
