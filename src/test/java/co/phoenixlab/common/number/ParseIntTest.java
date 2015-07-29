@@ -86,6 +86,43 @@ public class ParseIntTest {
         assertEquals(i, ParseInt.parseDec(s));
     }
 
+    @Test
+    public void testParseDec_MaxSigned() throws Exception {
+        int i = Integer.MAX_VALUE;
+        String s = Integer.toString(i);
+        assertEquals(i, ParseInt.parseDec(s));
+    }
+
+    @Test
+    public void testParseDec_MaxUnsigned() throws Exception {
+        int i = 0xFFFFFFFF;
+        String s = "4294967295";
+        assertEquals(i, ParseInt.parseDec(s));
+    }
+
+    //  For values larger than the unsigned max, the method shouldn't thrown an exception but it will return a
+    //  garbage result
+    @Test
+    public void testParseDec_UnsignedOverflow() throws Exception {
+        String s = "4294967296";
+        ParseInt.parseDec(s);
+    }
+
+    @Test
+    public void testParseDec_MinSigned() throws Exception {
+        int i = Integer.MIN_VALUE;
+        String s = Integer.toString(i);
+        assertEquals(i, ParseInt.parseDec(s));
+    }
+
+    //  For values lower than the signed min, the method shouldn't thrown an exception but it will return a
+    //  garbage result
+    @Test
+    public void testParseDec_MinSignedUnderflow() throws Exception {
+        String s = "-2147483649";
+        ParseInt.parseDec(s);
+    }
+
     //  Test bad
     @Test(expected = NumberFormatException.class)
     public void testParseDec_Bad() throws Exception {
@@ -140,9 +177,32 @@ public class ParseIntTest {
     }
 
     @Test
-    public void testParseHexMax() throws Exception {
+    public void testParseHexMaxSigned() throws Exception {
+        int i = Integer.MAX_VALUE;
+        String s = "0x" + Integer.toHexString(i);
+        assertEquals(i, ParseInt.parseHex(s));
+    }
+
+    @Test
+    public void testParseHexMaxUnsigned() throws Exception {
         int i = 0xFFFFFFFF;
         String s = "0xFFFFFFFF";
+        assertEquals(i, ParseInt.parseHex(s));
+    }
+
+    //  For values larger than the unsigned max, the method shouldn't thrown an exception but it will return a
+    //  garbage result
+    @Test
+    public void testParseHexMaxUnsignedOverflow() throws Exception {
+        String s = "0x100000000";
+        ParseInt.parseHex(s);
+    }
+
+    //  Technically this is the same as MaxUnsigned
+    @Test
+    public void testParseHexMinSigned() throws Exception {
+        int i = Integer.MIN_VALUE;
+        String s = "0x" + Integer.toHexString(i);
         assertEquals(i, ParseInt.parseHex(s));
     }
 
