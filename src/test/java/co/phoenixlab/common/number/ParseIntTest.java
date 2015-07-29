@@ -161,7 +161,7 @@ public class ParseIntTest {
     //  It is fully tested by parseDec()'s tests
 
     @Test
-     public void testParseHex() throws Exception {
+    public void testParseHex() throws Exception {
         int i = 123456;
         String s = Integer.toHexString(i);
         assertEquals(i, ParseInt.parseHex(s));

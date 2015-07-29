@@ -24,7 +24,8 @@ public class SafeNav<T> {
 
     /**
      * Starts a SafeNavigation chain with the given object.
-     * @param t The object, possibly null, to start the chain with
+     *
+     * @param t   The object, possibly null, to start the chain with
      * @param <T> The type of t
      * @return A SafeNav<T> object to operate with.
      * @see SafeNav
@@ -35,8 +36,9 @@ public class SafeNav<T> {
 
     /**
      * Starts a SafeNavigation chain with the given Optional.
+     *
      * @param optional An Optional<T> object, empty or occupied, to start the chain with
-     * @param <T> The type of t
+     * @param <T>      The type of t
      * @return A SafeNav<T> object to operate with.
      */
     public static <T> SafeNav<T> ofOptional(Optional<T> optional) {
@@ -49,8 +51,9 @@ public class SafeNav<T> {
      * This is the generalized method, which will construct a new SafeNav<R> for completion of {@code function} (as in,
      * if the contained value is null, no new instance will be constructed and this method will return the current
      * SafeNav).
+     *
      * @param function The function to apply to the contained value if present.
-     * @param <R> The return type of {@code function}
+     * @param <R>      The return type of {@code function}
      * @return A SafeNav<R> object containing the result of the function, or an empty SafeNav<R> object if the contained
      * value was null.
      */
@@ -70,6 +73,7 @@ public class SafeNav<T> {
      * <p>
      * This is the unary type specialization of {@link #next(Function)}, which does not construct a new SafeNav
      * instance in any case.
+     *
      * @param function The function to apply to the contained value if present.
      * @return A SafeNav<R> object containing the result of the function, or an empty SafeNav<R> object if the contained
      * value was null.
@@ -85,6 +89,7 @@ public class SafeNav<T> {
     /**
      * Gets the final result of the chain, or null if the contained value was initially null or any calls to
      * {@code next()} produced a null result.
+     *
      * @return The final result of applying the functions from previous {@code next()} calls, or null if at any point
      * the contained value was null.
      */
@@ -95,8 +100,9 @@ public class SafeNav<T> {
     /**
      * Takes the final result of the chain, and if it is not null, applies the provided {@code function} to it and
      * returns the resulting value. If it is null, this method simply returns null without applying {@code function}
+     *
      * @param function The function to apply if the final result is not null
-     * @param <R> The return type of the provided function
+     * @param <R>      The return type of the provided function
      * @return The result of calling the {@code function} with the final result, or null if the final result was null
      */
     public <R> R get(Function<T, R> function) {
@@ -105,6 +111,7 @@ public class SafeNav<T> {
 
     /**
      * Unary type specialization of {@link #get(Function)}
+     *
      * @param function The function to apply
      * @return The result of calling {@code function} with the final result, or null if the final result was null
      * @see #get(Function)
@@ -117,9 +124,10 @@ public class SafeNav<T> {
      * Returns the contained value, or if not present, throws an exception provided by the given
      * {@code exceptionFactory}. The {@code exceptionFactory} takes one integer argument, which is the depth at which
      * the contained value was last present.
+     *
      * @param exceptionFactory An exception factory that takes one integer argument indicating the depth at which the
      *                         contained value was last present
-     * @param <E> The type of exception to throw
+     * @param <E>              The type of exception to throw
      * @return The contained value
      * @throws E If the contained value is not present; the exception created by calling {@code exceptionFactory}
      */
@@ -133,6 +141,7 @@ public class SafeNav<T> {
     /**
      * Convenience method for throwing a NullPointerException with a default message for
      * {@link #orElseThrow(IntFunction)}
+     *
      * @return The contained value
      * @throws NullPointerException If the contained value is not present
      */
@@ -143,6 +152,7 @@ public class SafeNav<T> {
     /**
      * Convenience method for throwing a NoSuchElementException with a default message for
      * {@link #orElseThrow(IntFunction)}
+     *
      * @return The contained value
      * @throws NoSuchElementException If the contained value is not present
      */
@@ -160,6 +170,7 @@ public class SafeNav<T> {
     /**
      * Passes the current last call number of {@code next()} where the contained value was present (so far) to the
      * given consumer. This method allows for continued chaining, unlike {@link #getLastNonNullDepth()}.
+     *
      * @param consumer The consumer of the current last call number
      * @return The current SafeNav<T>
      */
@@ -170,6 +181,7 @@ public class SafeNav<T> {
 
     /**
      * Passes the contained value to the given consumer if it is present, otherwise does nothing.
+     *
      * @param consumer The consumer that will accept the contained value if present
      */
     public void ifPresent(Consumer<T> consumer) {
@@ -180,6 +192,7 @@ public class SafeNav<T> {
 
     /**
      * Returns the contained value, if present, or the given default value.
+     *
      * @param defaultVal The value (can be null) to return if the contained value is not present
      * @return The contained value, if present, or the default value
      */
@@ -193,9 +206,10 @@ public class SafeNav<T> {
     /**
      * If the contained value is present, returns the result of applying {@code function} to it. If not
      * present, returns the given default value.
-     * @param function The function to apply to the contained value if present
+     *
+     * @param function   The function to apply to the contained value if present
      * @param defaultVal The value to return if the contained value is not present
-     * @param <R> The return type of {@code function} and the type of the default value
+     * @param <R>        The return type of {@code function} and the type of the default value
      * @return The result of {@code function}, if the contained value is present, or the default value
      */
     public <R> R orElse(Function<T, R> function, R defaultVal) {
@@ -204,6 +218,7 @@ public class SafeNav<T> {
 
     /**
      * Converts this SafeNav to an Optional
+     *
      * @return An Optional of the contained value, if present, or an empty Optional, if not
      */
     public Optional<T> toOptional() {

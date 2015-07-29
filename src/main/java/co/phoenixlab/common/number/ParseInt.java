@@ -2,7 +2,8 @@ package co.phoenixlab.common.number;
 
 import java.util.OptionalInt;
 
-import static java.util.OptionalInt.*;
+import static java.util.OptionalInt.empty;
+import static java.util.OptionalInt.of;
 
 /**
  * Contains various methods for fast integer parsing of decimal and hexadecimal strings.
@@ -12,17 +13,19 @@ public class ParseInt {
     private static final String HEX_PREFIX = "0X";
     private static final int HEX_PREFIX_LEN = HEX_PREFIX.length();
 
-    private ParseInt() {}
+    private ParseInt() {
+    }
 
     /**
      * Attempts to parse an integer from the given String. This method tests for a "0x"/"0X" prefix to determine
      * whether to parse the number as a hexadecimal number or a decimal number.
      * <p>
      * This method does <strong>NOT</strong> check for under/overflow.
+     *
      * @param s The String to parse
      * @return The parsed integer
      * @throws NumberFormatException If the String was not able to be parsed as an integer either in hex or dec or was
-     * null
+     *                               null
      * @see #parseHex(String)
      * @see #parseDec(String)
      */
@@ -51,6 +54,7 @@ public class ParseInt {
      * prefix to indicate sign.
      * <p>
      * This method does <strong>NOT</strong> check for under/overflow.
+     *
      * @param s The String containing a decimal integer to be parsed
      * @return The parsed integer
      * @throws NumberFormatException If the String was not able to be parsed or was null
@@ -72,10 +76,11 @@ public class ParseInt {
      * <p>
      * This method expects an array of characters, optionally starting with '+'/'-' at index 0, consisting only of the
      * characters from '0' to '9'.
+     *
      * @param chars An array of chars consisting of the characters to be parsed as an integer
      * @return The parsed integer
      * @throws NumberFormatException If the chars do not represent a valid sequence of decimal digits optionally
-     * prefixed with a '+'/'-'
+     *                               prefixed with a '+'/'-'
      */
     public static int parseDec0(char[] chars) throws NumberFormatException {
         int length = chars.length;
@@ -103,6 +108,7 @@ public class ParseInt {
      * prefix which will be ignored. This method does <strong>NOT</strong> support using sign prefix ('+'/'-').
      * <p>
      * This method does <strong>NOT</strong> check for under/overflow.
+     *
      * @param s The String containing a decimal integer to be parsed
      * @return The parsed integer
      * @throws NumberFormatException If the String was not able to be parsed or was null
@@ -129,6 +135,7 @@ public class ParseInt {
      * <p>
      * This method expects an array of characters, <strong>without the "0x"/"0X" prefix, consisting only of the
      * characters from '0' to '9' and 'A' to 'Z' (no lowercase).
+     *
      * @param chars An array of chars consisting of the characters to be parsed as an integer
      * @param start The starting index to start parsing from
      * @return The parsed integer
@@ -147,7 +154,8 @@ public class ParseInt {
 
     /**
      * Parses the given String using {@link #parse(String)}, returning {@code def} if it failed to parse.
-     * @param s The String to parse
+     *
+     * @param s   The String to parse
      * @param def The default value to return if parsing fails
      * @return The parsed value from the String, or {@code def} if parsing failed
      * @see #parse(String)
@@ -162,7 +170,8 @@ public class ParseInt {
 
     /**
      * Parses the given String using {@link #parseDec(String)}, returning {@code def} if it failed to parse.
-     * @param s The String to parse
+     *
+     * @param s   The String to parse
      * @param def The default value to return if parsing fails
      * @return The parsed value from the String, or {@code def} if parsing failed
      * @see #parseDec(String)
@@ -177,7 +186,8 @@ public class ParseInt {
 
     /**
      * Parses the given String using {@link #parseHex(String)}, returning {@code def} if it failed to parse.
-     * @param s The String to parse
+     *
+     * @param s   The String to parse
      * @param def The default value to return if parsing fails
      * @return The parsed value from the String, or {@code def} if parsing failed
      * @see #parseHex(String)
@@ -193,6 +203,7 @@ public class ParseInt {
     /**
      * Parses the given String using {@link #parse(String)}, returning {@link OptionalInt#empty()} if it failed
      * to parse.
+     *
      * @param s The String to parse
      * @return An {@link OptionalInt} with the parsed value or empty if parsing failed.
      * @see #parse(String)
@@ -208,6 +219,7 @@ public class ParseInt {
     /**
      * Parses the given String using {@link #parseDec(String)}, returning {@link OptionalInt#empty()} if it failed
      * to parse.
+     *
      * @param s The String to parse
      * @return An {@link OptionalInt} with the parsed value or empty if parsing failed.
      * @see #parseDec(String)
@@ -223,6 +235,7 @@ public class ParseInt {
     /**
      * Parses the given String using {@link #parseHex(String)}, returning {@link OptionalInt#empty()} if it failed
      * to parse.
+     *
      * @param s The String to parse
      * @return An {@link OptionalInt} with the parsed value or empty if parsing failed.
      * @see #parseHex(String)
