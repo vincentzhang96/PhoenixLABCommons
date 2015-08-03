@@ -1,5 +1,6 @@
 package co.phoenixlab.common.localization;
 
+import java.util.Collection;
 import java.util.Locale;
 
 public interface Localizer {
@@ -40,6 +41,18 @@ public interface Localizer {
      * @param provider The LocaleStringProvider to unregister
      */
     void removeLocaleStringProvider(LocaleStringProvider provider);
+
+    /**
+     * Gets the providers registered with this Localizer.
+     *
+     * @return A Collection of LocaleStringProviders registered with this Localizer
+     */
+    Collection<LocaleStringProvider> getLocaleStringProviders();
+
+    /**
+     * Unregisters all providers from this Localizer
+     */
+    void removeAllLocaleStringProviders();
 
     /**
      * Checks if a given key exists.
