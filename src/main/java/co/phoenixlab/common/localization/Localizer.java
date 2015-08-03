@@ -21,6 +21,15 @@ public interface Localizer {
      */
     String PREFIX_FLAG_DO_NOT_LOCALIZE = internalSetFlagBit(PREFIX_FLAG_BASE, PREFIX_FLAG_DO_NOT_LOCALIZE_BIT);
 
+    int PREFIX_FLAG_DO_NOT_FORMAT_BIT = 1;
+    /**
+     * Prefix flag to prepend to a key to indicate that the localizer should not attempt to parse and replace
+     * format tokens in the localization string.
+     *
+     * @see #doNotFormat(String)
+     */
+    String PREFIX_FLAG_DO_NOT_FORMAT = internalSetFlagBit(PREFIX_FLAG_BASE, PREFIX_FLAG_DO_NOT_FORMAT_BIT);
+
     /**
      * Gets the locale for this Localizer.
      *
@@ -176,6 +185,23 @@ public interface Localizer {
             return internalSetFlagBit(key, PREFIX_FLAG_DO_NOT_LOCALIZE_BIT);
         } else {
             return PREFIX_FLAG_DO_NOT_LOCALIZE + key;
+        }
+    }
+
+    /**
+     * Flags a string not to be formatted by the localizer. The localizer will not attempt to parse and handle
+     * formatting tokens in the localized string. Other steps may still be performed, depending on the presence
+     * of other control flags.
+     *
+     * @param key The string to prevent localization on
+     * @return A key that will not be localized when passed to {@link #localize(String, Object...)} or
+     * {@link #localizeOrDefault(String, String, Object...)} and their specializations
+     */
+    static String doNotFormat(String key) {
+        if (key.startsWith(PREFIX_FLAG_BASE)) {
+            return internalSetFlagBit(key, PREFIX_FLAG_DO_NOT_FORMAT_BIT);
+        } else {
+            return PREFIX_FLAG_DO_NOT_FORMAT + key;
         }
     }
 
