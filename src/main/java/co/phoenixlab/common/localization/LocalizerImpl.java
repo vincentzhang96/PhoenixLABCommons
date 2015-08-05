@@ -2,6 +2,8 @@ package co.phoenixlab.common.localization;
 
 import java.util.*;
 
+import static co.phoenixlab.common.localization.Localizer.*;
+
 public class LocalizerImpl implements Localizer {
 
     private static final String NULL_KEY = "nullkey";
@@ -83,8 +85,16 @@ public class LocalizerImpl implements Localizer {
         if (key == null) {
             return NULL_KEY;
         }
+        String ret = key;
+        if (!internalIsFlagBitSet(key, PREFIX_FLAG_DO_NOT_LOCALIZE_BIT)) {
+            //  Localize
 
-        return null;
+        }
+        if (!internalIsFlagBitSet(key, PREFIX_FLAG_DO_NOT_FORMAT_BIT)) {
+            //  Format
+
+        }
+        return ret;
     }
 
     @Override
