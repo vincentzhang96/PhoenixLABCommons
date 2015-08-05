@@ -101,7 +101,7 @@ public class LocalizerImpl implements Localizer {
         }
         if (!internalIsFlagBitSet(key, PREFIX_FLAG_DO_NOT_FORMAT_BIT)) {
             //  Format
-            ret = format(ret, args);
+            ret = format(cleanKey, ret, args);
         }
         return ret;
     }
@@ -127,19 +127,136 @@ public class LocalizerImpl implements Localizer {
 
     /**
      * Performs the formatting step, as detailed in {@link #localize(String, Object...)}
-     * @param s The string containing optional tags to be formatted
+     *
+     * @param s    The string containing optional tags to be formatted
      * @param args The arguments for formatting
      * @return The formatted string
      */
-    private String format(String s, Object[] args) {
+    private String format(String key, String s, Object[] args) {
         //  Formatting is done by repeatedly resolving curly brace tokens and then square bracket tokens repeatedly
         //  until no more of either remain in the resultant string
         //  There is a maximum repeat limit and a resolution depth limit to prevent infinite loops or unbounded string
         //  growth, governed by the system properties co.phoenixlab.localizer.fmt.limits.xxx where xxx is "repeat" or
         //  "depth", respectively.
 
+        //  Number of times we've passed over the entire string
+        int repeatCount = 0;
+        //  Our current working string
+        String working = s;
+        //  StringBuilder for building the resultant for each pass
+        StringBuilder builder = new StringBuilder();
+        //  StringBuilder for accumulating the contents of a token
+        StringBuilder tokenBuilder = new StringBuilder();
+        //  Whether or not any substitution was made
+        boolean substitution = true;
+        while (repeatCount < MAX_REPEAT_COUNT)&&substitution {
+            //  Resolve curly brace tokens first
+            char[] chars = working.toCharArray();
+            boolean isEscaped = false;
+            boolean isInTag = false;
+            //  Track how many layers deep we are for curly brace tags - each pass will strip away the outermost layer
+            int curlyBraceDepth = 0;
+            for (int pos = 0; pos < chars.length; pos++) {
+                char c = chars[pos];
+                if (isEscaped) {
+                    if (isInTag) {
+                        tokenBuilder.append(c);
+                    } else {
+                        builder.append(c);
+                    }
+                    isEscaped = false;
+                } else {
+                    switch (c) {
+                        case '\\':
+                            //  Escape next character
+                            isEscaped = true;
+                            break;
+                        case '{':
+                            //  Start curly brace tag
+                            isInTag = true;
+                            curlyBraceDepth++;
+                            //  Reset our token StringBuilder
+                            tokenBuilder.setLength(0);
+                            break;
+                        case '}':
+                            if (isInTag) {
+                                curlyBraceDepth--;
+                                if (curlyBraceDepth == 0) {
+                                    builder.append(processCurlyBraceToken(tokenBuilder.toString(), args));
+                                    isInTag = false;
+                                    substitution = true;
+                                    break;
+                                }
+                                //  FALL THROUGH if not outmoster layer of tag
+                            }
+                            //  FALL THROUGH if not in curly tag
+                        default:
+                            if (isInTag) {
+                                tokenBuilder.append(c);
+                            } else {
+                                builder.append(c);
+                            }
+                    }
+                }
+            }
+            //  Now resolve square bracket tags
+            //  Reset token related vars
+            working = builder.toString();
+            chars = working.toCharArray();
+            builder.setLength(0);
+            tokenBuilder.setLength(0);
+            isEscaped = false;
+            isInTag = false;
+            for (int pos = 0; pos < chars.length; pos++) {
+                char c = chars[pos];
+                if (isEscaped) {
+                    if (isInTag) {
+                        tokenBuilder.append(c);
+                    } else {
+                        builder.append(c);
+                    }
+                    isEscaped = false;
+                } else {
+                    switch (c) {
+                        case '\\':
+                            //  Escape next character
+                            isEscaped = true;
+                            break;
+                        case '[':
+                            //  Start square bracket tag
+                            isInTag = true;
+                            //  Reset our token StringBuilder
+                            tokenBuilder.setLength(0);
+                            break;
+                        case '}':
+                            if (isInTag) {
+                                builder.append(resolveSubkey(key, tokenBuilder.toString()));
+                                isInTag = false;
+                                substitution = true;
+                                break;
+                            }
+                            //  FALL THROUGH if not in square tag
+                        default:
+                            if (isInTag) {
+                                tokenBuilder.append(c);
+                            } else {
+                                builder.append(c);
+                            }
+                    }
+                }
+            }
+            //  Prep for next iteration
+            working = builder.toString();
+            repeatCount++;
+        }
+        return null;
+    }
 
+    private String processCurlyBraceToken(String tokenContents, Object[] args) {
+        return null;
+    }
 
+    private String resolveSubkey(String baseKey, String tokenContents) {
         return null;
     }
 
