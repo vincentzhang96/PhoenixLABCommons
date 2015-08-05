@@ -1,39 +1,46 @@
 package co.phoenixlab.common.localization;
 
-import java.util.Collection;
-import java.util.Locale;
+import java.util.*;
 
 public class LocalizerImpl implements Localizer {
 
     private final Locale locale;
+    private final LinkedHashSet<LocaleStringProvider> providers;
+    private final Collection<LocaleStringProvider> providersUnmodifiable;
 
     public LocalizerImpl(Locale locale) {
+        Objects.requireNonNull(locale, "Locale cannot be null");
         this.locale = locale;
+        this.providers = new LinkedHashSet<>();
+        this.providersUnmodifiable = Collections.unmodifiableCollection(providers);
     }
 
     @Override
     public Locale getLocale() {
-        return null;
+        return locale;
     }
 
     @Override
     public void addLocaleStringProvider(LocaleStringProvider provider) {
-
+        Objects.requireNonNull(provider, "Provider cannot be null");
+        provider.setActiveLocale(locale);
+        providers.add(provider);
     }
 
     @Override
     public void removeLocaleStringProvider(LocaleStringProvider provider) {
-
+        Objects.requireNonNull(provider, "Provider cannot be null");
+        providers.remove(provider);
     }
 
     @Override
     public Collection<LocaleStringProvider> getLocaleStringProviders() {
-        return null;
+        return providersUnmodifiable;
     }
 
     @Override
     public void removeAllLocaleStringProviders() {
-
+        providers.clear();
     }
 
     @Override
