@@ -249,7 +249,7 @@ public class LocalizerImpl implements Localizer {
             working = builder.toString();
             repeatCount++;
         }
-        return null;
+        return working;
     }
 
     private String processCurlyBraceToken(String tokenContents, Object[] args) {
