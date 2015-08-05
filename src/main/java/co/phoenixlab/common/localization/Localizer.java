@@ -107,13 +107,13 @@ public interface Localizer {
      * Localizes a given key with the given argument for formatting.
      * <p>
      * The given key is used to fetch a special format string. Format strings may contain:
-     * <ul>
+     * <ol>
      * <li>Other localization keys inside of single square brackets: [full.localization.key]</li>
      * <li>Relative localization keys inside of single square brackets: [.relative.localization.key] which will
      * resolve to the given key + the relative key, so given "foo.bar" as the key and "[.baz.biz]" in the
      * corresponding locale string, the string from "foo.bar.baz.biz" will be substituted.</li>
      * <li>Argument index, formatting, and pluralization controls inside curly braces (see below)</li>
-     * </ul>
+     * </ol>
      * <p>
      * TODO Curly brace docs
      *
