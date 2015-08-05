@@ -99,7 +99,7 @@ public class LocalizerImpl implements Localizer {
         }
         if (!internalIsFlagBitSet(key, PREFIX_FLAG_DO_NOT_FORMAT_BIT)) {
             //  Format
-
+            ret = format(ret, args);
         }
         return ret;
     }
@@ -120,6 +120,21 @@ public class LocalizerImpl implements Localizer {
                 return val;
             }
         }
+        return null;
+    }
+
+    /**
+     * Performs the formatting step, as detailed in {@link #localize(String, Object...)}
+     * @param s The string containing optional tags to be formatted
+     * @param args The arguments for formatting
+     * @return The formatted string
+     */
+    private String format(String s, Object[] args) {
+        //  Formatting is done in two passes - first, curly brace tokens (#3) are interpreted and replaced, then
+        //  subkeys (#1, #2) are evaluated
+
+
+
         return null;
     }
 
