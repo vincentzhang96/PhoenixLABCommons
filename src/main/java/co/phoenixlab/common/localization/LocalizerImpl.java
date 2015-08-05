@@ -149,7 +149,8 @@ public class LocalizerImpl implements Localizer {
         StringBuilder tokenBuilder = new StringBuilder();
         //  Whether or not any substitution was made
         boolean substitution = true;
-        while (repeatCount < MAX_REPEAT_COUNT)&&substitution {
+        while (repeatCount < MAX_REPEAT_COUNT && substitution) {
+            substitution = false;
             //  Resolve curly brace tokens first
             char[] chars = working.toCharArray();
             boolean isEscaped = false;
