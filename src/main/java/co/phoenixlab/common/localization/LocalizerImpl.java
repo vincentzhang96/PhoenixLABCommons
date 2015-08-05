@@ -229,7 +229,7 @@ public class LocalizerImpl implements Localizer {
                             //  Reset our token StringBuilder
                             tokenBuilder.setLength(0);
                             break;
-                        case '}':
+                        case ']':
                             if (isInTag) {
                                 builder.append(resolveSubkey(key, tokenBuilder.toString()));
                                 isInTag = false;
