@@ -89,7 +89,10 @@ public class LocalizerImpl implements Localizer {
         String ret = cleanKey;
         if (!internalIsFlagBitSet(key, PREFIX_FLAG_DO_NOT_LOCALIZE_BIT)) {
             //  Localize
-
+            ret = lookup(cleanKey);
+            if (ret == null) {
+                return LOCALE_STRING_NOT_FOUND;
+            }
         }
         if (!internalIsFlagBitSet(key, PREFIX_FLAG_DO_NOT_FORMAT_BIT)) {
             //  Format
@@ -97,7 +100,7 @@ public class LocalizerImpl implements Localizer {
         }
         return ret;
     }
-    
+
     /**
      * Finds the value of the given key from the providers. This method iterates through the providers in a stack-like
      * fashion; that is, the last provider added is checked first, second last provider checked second, and so on.
