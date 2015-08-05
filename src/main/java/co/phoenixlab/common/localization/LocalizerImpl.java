@@ -4,6 +4,8 @@ import java.util.*;
 
 public class LocalizerImpl implements Localizer {
 
+    private static final String NULL_KEY = "nullkey";
+
     private final Locale locale;
     private final LinkedHashSet<LocaleStringProvider> providers;
     private final Collection<LocaleStringProvider> providersUnmodifiable;
@@ -51,41 +53,73 @@ public class LocalizerImpl implements Localizer {
 
     @Override
     public String localize(String key) {
+        if (key == null) {
+            return NULL_KEY;
+        }
+
         return null;
     }
 
     @Override
     public String localize(String key, Object arg0) {
+        if (key == null) {
+            return NULL_KEY;
+        }
+
         return null;
     }
 
     @Override
     public String localize(String key, Object arg0, Object arg1) {
+        if (key == null) {
+            return NULL_KEY;
+        }
+
         return null;
     }
 
     @Override
     public String localize(String key, Object... args) {
+        if (key == null) {
+            return NULL_KEY;
+        }
+
         return null;
     }
 
     @Override
     public String localizeOrDefault(String key, String def) {
+        if (key == null) {
+            return def;
+        }
+
         return null;
     }
 
     @Override
     public String localizeOrDefault(String key, String def, Object arg0) {
+        if (key == null) {
+            return def;
+        }
+
         return null;
     }
 
     @Override
     public String localizeOrDefault(String key, String def, Object arg0, Object arg1) {
+        if (key == null) {
+            return def;
+        }
+
         return null;
     }
 
     @Override
     public String localizeOrDefault(String key, String def, Object... args) {
+        if (key == null) {
+            return def;
+        }
+
         return null;
     }
 }
