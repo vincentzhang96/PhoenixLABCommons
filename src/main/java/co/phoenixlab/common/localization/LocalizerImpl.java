@@ -258,7 +258,17 @@ public class LocalizerImpl implements Localizer {
     }
 
     private String resolveSubkey(String baseKey, String tokenContents) {
-        return null;
+        if (tokenContents.length() == 0) {
+            return LOCALE_STRING_NOT_FOUND;
+        }
+        boolean isRelative = tokenContents.charAt(0) == '.';
+        String key;
+        if (isRelative) {
+            key = baseKey + tokenContents;
+        } else {
+            key = tokenContents;
+        }
+        return Optional.ofNullable(lookup(key)).orElse(LOCALE_STRING_NOT_FOUND);
     }
 
     @Override
