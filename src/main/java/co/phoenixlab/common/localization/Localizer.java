@@ -54,7 +54,7 @@ public interface Localizer {
     /**
      * Gets the providers registered with this Localizer.
      *
-     * @return A Collection of LocaleStringProviders registered with this Localizer
+     * @return An unmodifiable Collection view of the LocaleStringProviders registered with this Localizer
      */
     Collection<LocaleStringProvider> getLocaleStringProviders();
 
