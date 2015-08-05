@@ -85,7 +85,8 @@ public class LocalizerImpl implements Localizer {
         if (key == null) {
             return NULL_KEY;
         }
-        String ret = key;
+        String cleanKey = stripFlags(key);
+        String ret = cleanKey;
         if (!internalIsFlagBitSet(key, PREFIX_FLAG_DO_NOT_LOCALIZE_BIT)) {
             //  Localize
 
