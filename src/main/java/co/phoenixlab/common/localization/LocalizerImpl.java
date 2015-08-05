@@ -10,6 +10,8 @@ import static co.phoenixlab.common.localization.Localizer.stripFlags;
 public class LocalizerImpl implements Localizer {
 
     private static final String NULL_KEY = "nullkey";
+    private static final int MAX_REPEAT_COUNT = Integer.getInteger("co.phoenixlab.localizer.fmt.limits.repeat", 8);
+    private static final int MAX_DEPTH = Integer.getInteger("co.phoenixlab.localizer.fmt.limits.depth", 8);
 
     private final Locale locale;
     private final List<LocaleStringProvider> providers;
@@ -130,8 +132,11 @@ public class LocalizerImpl implements Localizer {
      * @return The formatted string
      */
     private String format(String s, Object[] args) {
-        //  Formatting is done in two passes - first, curly brace tokens (#3) are interpreted and replaced, then
-        //  subkeys (#1, #2) are evaluated
+        //  Formatting is done by repeatedly resolving curly brace tokens and then square bracket tokens repeatedly
+        //  until no more of either remain in the resultant string
+        //  There is a maximum repeat limit and a resolution depth limit to prevent infinite loops or unbounded string
+        //  growth, governed by the system properties co.phoenixlab.localizer.fmt.limits.xxx where xxx is "repeat" or
+        //  "depth", respectively.
 
 
 
