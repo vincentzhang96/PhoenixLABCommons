@@ -97,6 +97,19 @@ public class LocalizerImpl implements Localizer {
         }
         return ret;
     }
+    
+    /**
+     * Finds the value of the given key from the providers. This method iterates through the providers in a stack-like
+     * fashion; that is, the last provider added is checked first, second last provider checked second, and so on.
+     * This allows for proper overriding/priority of providers.
+     * @param key The key to look up
+     * @return The value associated with the given key, or null if no provider could provide the requested value
+     */
+    private String lookup(String key) {
+
+
+        return null;
+    }
 
     @Override
     public String localizeOrDefault(String key, String def) {
