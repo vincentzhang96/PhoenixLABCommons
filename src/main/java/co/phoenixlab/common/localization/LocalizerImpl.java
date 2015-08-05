@@ -10,9 +10,9 @@ import static co.phoenixlab.common.localization.Localizer.stripFlags;
 public class LocalizerImpl implements Localizer {
 
     private static final String NULL_KEY = "nullkey";
-    private static final int MAX_REPEAT_COUNT = Integer.getInteger("co.phoenixlab.localizer.fmt.limits.repeat", 8);
-    private static final int MAX_DEPTH = Integer.getInteger("co.phoenixlab.localizer.fmt.limits.depth", 8);
 
+    private final int maxRepeatCount;
+    private final int maxDepth;
     private final Locale locale;
     private final List<LocaleStringProvider> providers;
     private final Collection<LocaleStringProvider> providersUnmodifiable;
@@ -22,6 +22,8 @@ public class LocalizerImpl implements Localizer {
         this.locale = locale;
         this.providers = new ArrayList<>();
         this.providersUnmodifiable = Collections.unmodifiableCollection(providers);
+        maxRepeatCount = Integer.getInteger("co.phoenixlab.localizer.fmt.limits.repeat", 8);
+        maxDepth = Integer.getInteger("co.phoenixlab.localizer.fmt.limits.depth", 8);
     }
 
     @Override
@@ -149,7 +151,7 @@ public class LocalizerImpl implements Localizer {
         StringBuilder tokenBuilder = new StringBuilder();
         //  Whether or not any substitution was made
         boolean substitution = true;
-        while (repeatCount < MAX_REPEAT_COUNT && substitution) {
+        while (repeatCount < maxRepeatCount && substitution) {
             substitution = false;
             //  Resolve curly brace tokens first
             char[] chars = working.toCharArray();
