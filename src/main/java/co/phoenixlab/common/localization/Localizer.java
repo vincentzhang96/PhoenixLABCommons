@@ -225,4 +225,21 @@ public interface Localizer {
         return new String(chars);
     }
 
+    /**
+     * <strong>INTERNAL METHOD</strong>
+     * <p>
+     * Gets the value of the bit at the given position in the flag section of a flagged key.
+     * @param key The flagged key to check from
+     * @param bit The bit number to check
+     * @return true if the bit is set, false if not
+     */
+    static boolean internalIsFlagBitSet(String key, int bit) {
+        if (bit > 4) {
+            throw new IllegalArgumentException("Bit must be between 0 and 4");
+        }
+        char[] chars = key.toCharArray();
+        int bits = chars[2];
+        return (bits & (1 << bit)) != 0;
+    }
+
 }
