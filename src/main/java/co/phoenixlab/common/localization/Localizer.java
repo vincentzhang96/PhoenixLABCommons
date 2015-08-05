@@ -245,4 +245,16 @@ public interface Localizer {
         return (bits & (1 << bit)) != 0;
     }
 
+    /**
+     * Removes all flags from a key. If the key is not flagged, then does nothing and returns the provided key.
+     * @param key The key to remove all flags from
+     * @return The key with all flags removed
+     */
+    static String stripFlags(String key) {
+        if (key.startsWith(PREFIX_FLAG_BASE) && key.length() > PREFIX_FLAG_LENGTH) {
+            return key.substring(PREFIX_FLAG_LENGTH + 1);
+        }
+        return key;
+    }
+
 }
