@@ -1,12 +1,16 @@
 package co.phoenixlab.common.lang;
 
+import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.Consumer;
 
 /**
  * Provides a reversed view of a ListIterator, starting from the last element.
  * @param <E>
  */
-public class ReverseListIterator<E> implements ListIterator<E> {
+public class ReverseListIterator<E> implements ListIterator<E>, Iterable<E> {
 
     private final ListIterator<E> parent;
 
@@ -61,5 +65,22 @@ public class ReverseListIterator<E> implements ListIterator<E> {
     @Override
     public void add(E e) {
         parent.add(e);
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return this;
+    }
+
+    @Override
+    public void forEach(Consumer<? super E> action) {
+        while (hasNext()) {
+            action.accept(next());
+        }
+    }
+
+    @Override
+    public Spliterator<E> spliterator() {
+        return Spliterators.spliteratorUnknownSize(this, 0);
     }
 }
