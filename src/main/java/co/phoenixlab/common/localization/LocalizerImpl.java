@@ -45,7 +45,8 @@ public class LocalizerImpl implements Localizer {
 
     @Override
     public boolean containsKey(String key) {
-        return false;
+        return providers.stream().
+                anyMatch(p -> p.contains(key));
     }
 
     @Override
