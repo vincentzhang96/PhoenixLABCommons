@@ -237,6 +237,9 @@ public interface Localizer {
         if (bit > 4) {
             throw new IllegalArgumentException("Bit must be between 0 and 4");
         }
+        if (key.length() <= PREFIX_FLAG_LENGTH || !key.startsWith(PREFIX_FLAG_BASE)) {
+            return false;
+        }
         char[] chars = key.toCharArray();
         int bits = chars[2];
         return (bits & (1 << bit)) != 0;
