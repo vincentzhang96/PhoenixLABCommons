@@ -113,10 +113,8 @@ public class LocalizerImpl implements Localizer {
      * @return The value associated with the given key, or null if no provider could provide the requested value
      */
     private String lookup(String key) {
-        ListIterator<LocaleStringProvider> iterator = new ReverseListIterator<>(providers.listIterator());
-        LocaleStringProvider provider;
-        while (iterator.hasNext()) {
-            provider = iterator.next();
+        ReverseListIterator<LocaleStringProvider> iterator = new ReverseListIterator<>(providers.listIterator());
+        for (LocaleStringProvider provider : iterator) {
             String val = provider.get(key);
             if (val != null) {
                 return val;
