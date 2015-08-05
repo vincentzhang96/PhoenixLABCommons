@@ -9,8 +9,6 @@ import static co.phoenixlab.common.localization.Localizer.stripFlags;
 
 public class LocalizerImpl implements Localizer {
 
-    private static final String NULL_KEY = "nullkey";
-
     private final int maxRepeatCount;
     private final int maxDepth;
     private final Locale locale;
@@ -63,7 +61,7 @@ public class LocalizerImpl implements Localizer {
     @Override
     public String localize(String key) {
         if (key == null) {
-            return NULL_KEY;
+            return LOCALE_STRING_NOT_FOUND;
         }
 
         return null;
@@ -72,7 +70,7 @@ public class LocalizerImpl implements Localizer {
     @Override
     public String localize(String key, Object arg0) {
         if (key == null) {
-            return NULL_KEY;
+            return LOCALE_STRING_NOT_FOUND;
         }
 
         return null;
@@ -81,7 +79,7 @@ public class LocalizerImpl implements Localizer {
     @Override
     public String localize(String key, Object arg0, Object arg1) {
         if (key == null) {
-            return NULL_KEY;
+            return LOCALE_STRING_NOT_FOUND;
         }
 
         return null;
@@ -90,7 +88,7 @@ public class LocalizerImpl implements Localizer {
     @Override
     public String localize(String key, Object... args) {
         if (key == null) {
-            return NULL_KEY;
+            return LOCALE_STRING_NOT_FOUND;
         }
         String cleanKey = stripFlags(key);
         String ret = cleanKey;
