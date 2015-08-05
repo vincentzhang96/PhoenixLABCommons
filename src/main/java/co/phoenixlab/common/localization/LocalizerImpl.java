@@ -2,20 +2,21 @@ package co.phoenixlab.common.localization;
 
 import java.util.*;
 
-import static co.phoenixlab.common.localization.Localizer.*;
+import static co.phoenixlab.common.localization.Localizer.internalIsFlagBitSet;
+import static co.phoenixlab.common.localization.Localizer.stripFlags;
 
 public class LocalizerImpl implements Localizer {
 
     private static final String NULL_KEY = "nullkey";
 
     private final Locale locale;
-    private final LinkedHashSet<LocaleStringProvider> providers;
+    private final List<LocaleStringProvider> providers;
     private final Collection<LocaleStringProvider> providersUnmodifiable;
 
     public LocalizerImpl(Locale locale) {
         Objects.requireNonNull(locale, "Locale cannot be null");
         this.locale = locale;
-        this.providers = new LinkedHashSet<>();
+        this.providers = new ArrayList<>();
         this.providersUnmodifiable = Collections.unmodifiableCollection(providers);
     }
 
@@ -105,6 +106,7 @@ public class LocalizerImpl implements Localizer {
      * Finds the value of the given key from the providers. This method iterates through the providers in a stack-like
      * fashion; that is, the last provider added is checked first, second last provider checked second, and so on.
      * This allows for proper overriding/priority of providers.
+     *
      * @param key The key to look up
      * @return The value associated with the given key, or null if no provider could provide the requested value
      */
