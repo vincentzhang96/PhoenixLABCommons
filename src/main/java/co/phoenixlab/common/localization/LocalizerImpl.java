@@ -197,6 +197,14 @@ public class LocalizerImpl implements Localizer {
                     }
                 }
             }
+            if (isEscaped) {
+                //  Backslash at end of string, not fatal so we just insert it
+                builder.append('\\');
+            }
+            if (curlyBraceDepth > 0) {
+                //  There's an unclosed tag somewhere
+                return INVALID_FORMAT_STRING;
+            }
             //  Now resolve square bracket tags
             //  Reset token related vars
             working = builder.toString();
@@ -242,6 +250,14 @@ public class LocalizerImpl implements Localizer {
                             }
                     }
                 }
+            }
+            if (isEscaped) {
+                //  Backslash at end of string, not fatal so we just insert it
+                builder.append('\\');
+            }
+            if (isInTag) {
+                //  There's an unclosed tag somewhere
+                return INVALID_FORMAT_STRING;
             }
             //  Prep for next iteration
             working = builder.toString();
