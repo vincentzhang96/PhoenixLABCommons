@@ -24,6 +24,24 @@ public class SpriteAnimation extends Transition {
 
     /**
      * Creates a SpriteAnimation with the given parameters using an FPS calculated from the number of frames divided
+     * by the duration of the animation and no offset from the top or left edges.
+     *
+     * @param imageView The ImageView containing the image to be used as a spritesheet and to display the animation
+     * @param duration  The amount of time the animation should last for
+     * @param count     The number of frames in the animation
+     * @param columns   The number of columns in the spritesheet
+     * @param width     The width of a single frame
+     * @param height    The height of a single frame
+     * @see #SpriteAnimation(ImageView, Duration, int, int, int, int, int, int, int)
+     */
+    public SpriteAnimation(ImageView imageView, Duration duration,
+                           int count, int columns,
+                           int width, int height) {
+        this(imageView, duration, count, columns, 0, 0, width, height, (int) (count / duration.toSeconds()));
+    }
+
+    /**
+     * Creates a SpriteAnimation with the given parameters using an FPS calculated from the number of frames divided
      * by the duration of the animation.
      *
      * @param imageView The ImageView containing the image to be used as a spritesheet and to display the animation
@@ -41,6 +59,26 @@ public class SpriteAnimation extends Transition {
                            int offsetX, int offsetY,
                            int width, int height) {
         this(imageView, duration, count, columns, offsetX, offsetY, width, height, (int) (count / duration.toSeconds()));
+    }
+
+    /**
+     * Creates a SpriteAnimation with the given parameters and no offset from the top or left edges.
+     *
+     * @param imageView The ImageView containing the image to be used as a spritesheet and to display the animation
+     * @param duration  The amount of time the animation should last for
+     * @param count     The number of frames in the animation
+     * @param columns   The number of columns in the spritesheet
+     * @param width     The width of a single frame
+     * @param height    The height of a single frame
+     * @param fps       The framerate at which this animation should render at, which may be different from
+     *                  {@code count/duration}. This value does not slow down or speed up the animation, but instead
+     *                  affects how often new frames are drawn.
+     * @see #SpriteAnimation(ImageView, Duration, int, int, int, int, int, int, int)
+     */
+    public SpriteAnimation(ImageView imageView, Duration duration,
+                           int count, int columns,
+                           int width, int height, int fps) {
+        this(imageView, duration, count, columns, 0, 0, width, height, fps);
     }
 
     /**
