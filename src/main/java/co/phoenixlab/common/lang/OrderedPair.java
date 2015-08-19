@@ -7,15 +7,26 @@ public class OrderedPair<T, U> {
     private final T t;
     private final U u;
 
+    /**
+     * Creates an ordered pair (2-tuple) with the first element being t and the second u.
+     * @param t The first element in the ordered pair
+     * @param u The second element in the ordered pair
+     */
     public OrderedPair(T t, U u) {
         this.t = t;
         this.u = u;
     }
 
+    /**
+     * Gets the first element in the ordered pair
+     */
     public T getT() {
         return t;
     }
 
+    /**
+     * Gets the second element in the ordered pair
+     */
     public U getU() {
         return u;
     }
