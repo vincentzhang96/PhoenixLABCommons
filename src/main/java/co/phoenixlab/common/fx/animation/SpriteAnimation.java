@@ -7,6 +7,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * SpriteAnimation from http://blog.netopyr.com/2012/03/09/creating-a-sprite-animation-with-javafx/
  */
@@ -101,7 +103,7 @@ public class SpriteAnimation extends Transition {
                            int offsetX, int offsetY,
                            int width, int height, int fps) {
         super(fps);
-        this.imageView = imageView;
+        this.imageView = requireNonNull(imageView);
         this.count = count;
         this.columns = columns;
         this.offsetX = offsetX;
