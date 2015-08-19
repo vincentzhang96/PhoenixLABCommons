@@ -1,4 +1,4 @@
-package co.phoenixlab.common.fx.transition;
+package co.phoenixlab.common.fx.animation.transition;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
