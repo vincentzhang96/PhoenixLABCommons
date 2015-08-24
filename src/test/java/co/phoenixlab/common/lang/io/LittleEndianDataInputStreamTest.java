@@ -11,7 +11,7 @@ public class LittleEndianDataInputStreamTest {
 
     @Test
     public void testReadByte() throws Exception {
-        byte b = (byte) 0x12;
+        byte b = 0x12;
         ByteArrayInputStream bais = new ByteArrayInputStream(new byte[] {b});
         DataInputStream dis = new DataInputStream(bais);
         LittleEndianDataInputStream ledis = new LittleEndianDataInputStream(dis);
