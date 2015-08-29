@@ -50,6 +50,11 @@ public class OrderedPairTest {
     }
 
     @Test
+    public void testEqualsOther() throws Exception {
+        assertNotEquals(pair, new Object());
+    }
+
+    @Test
     public void testEqualsNull() throws Exception {
         OrderedPair<Object, Object> op = new OrderedPair<>(null, null);
         assertEquals(nullPair, op);
