@@ -92,11 +92,27 @@ public class LittleEndianDataInputStreamTest {
 
     @Test
     public void testReadFloat() throws Exception {
-
+        float f = 1.123F;
+        int i = Float.floatToRawIntBits(f);
+        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[]{(byte) (i & 0xFF), (byte) ((i >> 8) & 0xFF),
+                (byte) ((i >> 16) & 0xFF), (byte) ((i >> 24) & 0xFF)});
+        DataInputStream dis = new DataInputStream(bais);
+        LittleEndianDataInputStream ledis = new LittleEndianDataInputStream(dis);
+        assertEquals(f, ledis.readFloat(), 0.0005F);
     }
 
     @Test
     public void testReadDouble() throws Exception {
-
+        double d = 1.123;
+        long l = Double.doubleToRawLongBits(d);
+        ByteArrayInputStream bais = new ByteArrayInputStream(new byte[]{
+                (byte) (l & 0xFF), (byte) ((l >> 8) & 0xFF),
+                (byte) ((l >> 16) & 0xFF), (byte) ((l >> 24) & 0xFF),
+                (byte) ((l >> 32) & 0xFF), (byte) ((l >> 40) & 0xFF),
+                (byte) ((l >> 48) & 0xFF), (byte) ((l >> 56) & 0xFF)
+        });
+        DataInputStream dis = new DataInputStream(bais);
+        LittleEndianDataInputStream ledis = new LittleEndianDataInputStream(dis);
+        assertEquals(d, ledis.readDouble(), 0.0005);
     }
 }
