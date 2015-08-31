@@ -2,6 +2,8 @@ package co.phoenixlab.common.lang;
 
 import org.junit.*;
 
+import static org.hamcrest.CoreMatchers.anything;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class OrderedPairTest {
@@ -93,5 +95,11 @@ public class OrderedPairTest {
         OrderedPair<Object, Object> op = OrderedPair.twin(tObj);
         assertSame(tObj, op.getT());
         assertSame(tObj, op.getU());
+    }
+
+    @Test
+    public void testHashCode() throws Exception {
+        OrderedPair<Object, Object> op = new OrderedPair<>(uObj, tObj);
+        assertThat(op.hashCode(), is(anything()));
     }
 }
