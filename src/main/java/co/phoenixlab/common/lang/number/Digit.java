@@ -3,7 +3,7 @@ package co.phoenixlab.common.lang.number;
 /**
  * Internal helper class for parsing decimal and hexadecimal digits
  */
-class Digit {
+final class Digit {
 
     private Digit() {}
 

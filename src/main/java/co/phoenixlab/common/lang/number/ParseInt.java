@@ -8,7 +8,7 @@ import static java.util.OptionalInt.of;
 /**
  * Contains various methods for fast integer parsing of decimal and hexadecimal strings.
  */
-public class ParseInt {
+public final class ParseInt {
 
     private static final String HEX_PREFIX = "0X";
     private static final int HEX_PREFIX_LEN = HEX_PREFIX.length();
