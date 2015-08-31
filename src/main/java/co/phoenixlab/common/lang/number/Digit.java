@@ -1,4 +1,4 @@
-package co.phoenixlab.common.number;
+package co.phoenixlab.common.lang.number;
 
 /**
  * Internal helper class for parsing decimal and hexadecimal digits
