@@ -1,5 +1,6 @@
 package co.phoenixlab.common.lang.number;
 
+import co.phoenixlab.common.testutils.TestUtils;
 import org.junit.*;
 
 import java.util.OptionalInt;
@@ -17,6 +18,11 @@ public class ParseIntTest {
             chars[i] = (char) i;
         }
         WHITESPACE = new String(chars);
+    }
+
+    @Test
+    public void testUtilityClass() throws Exception {
+        TestUtils.testIsUtilityClass(ParseInt.class);
     }
 
     //  Test dec/hex picking
@@ -135,6 +141,12 @@ public class ParseIntTest {
     @Test(expected = NumberFormatException.class)
     public void testParseDec_Null() throws Exception {
         ParseInt.parseDec(null);
+    }
+
+    //  Test empty
+    @Test(expected = NumberFormatException.class)
+    public void testParseDec_Empty() throws Exception {
+        ParseInt.parseDec("");
     }
 
     //  Test positive sign prefix
@@ -259,6 +271,13 @@ public class ParseIntTest {
     @Test(expected = NumberFormatException.class)
     public void testParseHex_Positive3() throws Exception {
         String s = "+12AB";
+        ParseInt.parseHex(s);
+    }
+
+    //  Test prefix with no value reject
+    @Test(expected = NumberFormatException.class)
+    public void testParseHex_PrefixNoValue() throws Exception {
+        String s = "0x";
         ParseInt.parseHex(s);
     }
 
