@@ -110,17 +110,6 @@ public class SafeNav<T> {
     }
 
     /**
-     * Unary type specialization of {@link #get(Function)}
-     *
-     * @param function The function to apply
-     * @return The result of calling {@code function} with the final result, or null if the final result was null
-     * @see #get(Function)
-     */
-    public T get(UnaryOperator<T> function) {
-        return next(function).get();
-    }
-
-    /**
      * Returns the contained value, or if not present, throws an exception provided by the given
      * {@code exceptionFactory}. The {@code exceptionFactory} takes one integer argument, which is the depth at which
      * the contained value was last present.
