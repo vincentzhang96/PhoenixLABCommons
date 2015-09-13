@@ -157,4 +157,17 @@ public class SafeNavTest {
         assertNull(s);
     }
 
+    @Test
+    public void testOrElseThrow() throws Exception {
+        Object o = new Object();
+        SafeNav<Object> nav = SafeNav.of(o);
+        Object o1 = nav.orElseThrow(i -> new RuntimeException("Shouldn't happen"));
+        assertSame(o, o1);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testOrElseThrowThrows() throws Exception {
+        SafeNav<Object> nav = SafeNav.of(null);
+        nav.orElseThrow(i -> new RuntimeException("Got null at safenav index " + i));
+    }
 }
