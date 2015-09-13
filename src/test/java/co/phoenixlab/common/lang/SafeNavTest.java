@@ -84,4 +84,77 @@ public class SafeNavTest {
         assertNull(o);
     }
 
+    @Test
+    public void testNext() throws Exception {
+        String ret = "potato";
+        Object o = new Object() {
+            @Override
+            public String toString() {
+                return ret;
+            }
+        };
+        SafeNav<Object> nav = SafeNav.of(o);
+        String s = nav.next(Object::toString).get();
+        assertNotNull(s);
+        assertEquals(ret, s);
+    }
+
+    @Test
+    public void testNextNull() throws Exception {
+        Object o = null;
+        SafeNav<Object> nav = SafeNav.of(o);
+        String s = nav.next(Object::toString).get();
+        assertNull(s);
+    }
+
+    @Test
+    public void testNextSameType() throws Exception {
+        String s = "potato";
+        SafeNav<String> nav = SafeNav.of(s);
+        String s1 = nav.next(String::toUpperCase).get();
+        assertNotNull(s);
+        assertEquals(s.toUpperCase(), s1);
+    }
+
+    @Test
+    public void testNextChained() throws Exception {
+        String ret = "potato";
+        Object o = new Object() {
+            @Override
+            public String toString() {
+                return ret;
+            }
+        };
+        SafeNav<Object> nav = SafeNav.of(o);
+        String s = nav.next(Object::toString).
+                next(String::toUpperCase).
+                get();
+        assertNotNull(s);
+        assertEquals(ret.toUpperCase(), s);
+    }
+
+    @Test
+    public void testNextChainedNull() throws Exception {
+        Object o = new Object() {
+            @Override
+            public String toString() {
+                return null;
+            }
+        };
+        SafeNav<Object> nav = SafeNav.of(o);
+        String s = nav.next(Object::toString).
+                next(String::toUpperCase).
+                get();
+        assertNull(s);
+    }
+
+    @Test
+    public void testNextChainedNullStart() throws Exception {
+        SafeNav<Object> nav = SafeNav.of(null);
+        String s = nav.next(Object::toString).
+                next(String::toUpperCase).
+                get();
+        assertNull(s);
+    }
+
 }
