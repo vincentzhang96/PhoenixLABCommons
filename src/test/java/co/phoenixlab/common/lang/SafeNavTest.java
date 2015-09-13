@@ -2,6 +2,7 @@ package co.phoenixlab.common.lang;
 
 import org.junit.*;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -170,4 +171,33 @@ public class SafeNavTest {
         SafeNav<Object> nav = SafeNav.of(null);
         nav.orElseThrow(i -> new RuntimeException("Got null at safenav index " + i));
     }
+
+    @Test
+    public void testOrElseThrowNPE() throws Exception {
+        Object o = new Object();
+        SafeNav<Object> nav = SafeNav.of(o);
+        Object o1 = nav.orElseThrowNPE();
+        assertSame(o, o1);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testOrElseThrowNPEThrows() throws Exception {
+        SafeNav<Object> nav = SafeNav.of(null);
+        nav.orElseThrowNPE();
+    }
+
+    @Test
+    public void testOrElseThrowNSEE() throws Exception {
+        Object o = new Object();
+        SafeNav<Object> nav = SafeNav.of(o);
+        Object o1 = nav.orElseThrowNSEE();
+        assertSame(o, o1);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testOrElseThrowNSEEThrows() throws Exception {
+        SafeNav<Object> nav = SafeNav.of(null);
+        nav.orElseThrowNSEE();
+    }
+
 }
