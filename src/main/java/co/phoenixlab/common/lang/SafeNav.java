@@ -10,7 +10,7 @@ public class SafeNav<T> {
      */
     private T val;
     /**
-     * The last call number of {@link #next(Function)} or {@link #next(UnaryOperator)}
+     * The last call number of {@link #next(Function)}
      */
     private int lastNonNullDepth;
 
