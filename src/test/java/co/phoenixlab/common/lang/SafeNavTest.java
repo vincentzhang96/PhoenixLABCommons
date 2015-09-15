@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class SafeNavTest {
 
@@ -199,5 +200,24 @@ public class SafeNavTest {
         SafeNav<Object> nav = SafeNav.of(null);
         nav.orElseThrowNSEE();
     }
+
+    @Test
+    public void testIfPresent() throws Exception {
+        Number n = mock(Number.class);
+        SafeNav.of(n).ifPresent(Number::intValue);
+        verify(n, times(1)).intValue();
+    }
+
+    @Test
+    public void testIfPresentNotPresent() throws Exception {
+        SafeNav<Number> nav = SafeNav.of(null);
+        nav.ifPresent(this::failMe);
+    }
+
+    private void failMe(Number number) {
+        fail();
+    }
+
+
 
 }
