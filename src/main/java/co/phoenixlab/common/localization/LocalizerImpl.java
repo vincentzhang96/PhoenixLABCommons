@@ -154,8 +154,7 @@ public class LocalizerImpl implements Localizer {
             boolean isInTag = false;
             //  Track how many layers deep we are for curly brace tags - each pass will strip away the outermost layer
             int curlyBraceDepth = 0;
-            for (int pos = 0; pos < chars.length; pos++) {
-                char c = chars[pos];
+            for (char c : chars) {
                 if (isEscaped) {
                     if (isInTag) {
                         tokenBuilder.append(c);
@@ -213,8 +212,7 @@ public class LocalizerImpl implements Localizer {
             tokenBuilder.setLength(0);
             isEscaped = false;
             isInTag = false;
-            for (int pos = 0; pos < chars.length; pos++) {
-                char c = chars[pos];
+            for (char c : chars) {
                 if (isEscaped) {
                     if (isInTag) {
                         tokenBuilder.append(c);
