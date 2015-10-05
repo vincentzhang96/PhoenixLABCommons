@@ -145,23 +145,27 @@ public class LocalizerImpl implements Localizer {
         //  Whether or not any substitution was made
         boolean substitution = true;
         while (repeatCount < maxRepeatCount && substitution) {
-            //  Resolve curly brace tokens first
-            char[] chars = working.toCharArray();
-            substitution = processCurlyTokens(builder, chars, args);
+            try {
+                //  Resolve curly brace tokens first
+                char[] chars = working.toCharArray();
+                substitution = processCurlyTokens(builder, chars, args);
 
-            //  Now resolve square bracket tags
-            //  Reset
-            int len = builder.length();
-            if (len == chars.length) {
-                builder.getChars(0, len, chars, 0);
-            } else {
-                chars = builder.toString().toCharArray();
+                //  Now resolve square bracket tags
+                //  Reset
+                int len = builder.length();
+                if (len == chars.length) {
+                    builder.getChars(0, len, chars, 0);
+                } else {
+                    chars = builder.toString().toCharArray();
+                }
+                builder.setLength(0);
+                substitution |= processSquareBracketTokens(builder, chars, key);
+                //  Prep for next iteration
+                working = builder.toString();
+                repeatCount++;
+            } catch (IllegalArgumentException e) {
+                return INVALID_FORMAT_STRING;
             }
-            builder.setLength(0);
-            substitution |= processSquareBracketTokens(builder, chars,  key);
-            //  Prep for next iteration
-            working = builder.toString();
-            repeatCount++;
         }
         return working;
     }
