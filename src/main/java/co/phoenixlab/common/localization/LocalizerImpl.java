@@ -327,7 +327,11 @@ public class LocalizerImpl implements Localizer {
     }
 
     private String handleStringFormat(String fmt, Object arg) {
-        return null;
+        try {
+            return String.format(fmt, arg);
+        } catch (IllegalFormatException e) {
+            throw new IllegalArgumentException();
+        }
     }
 
     private String handleDateTimeFormat(String fmt, Object arg) {
