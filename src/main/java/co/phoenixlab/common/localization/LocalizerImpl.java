@@ -283,6 +283,58 @@ public class LocalizerImpl implements Localizer {
     }
 
     private String processCurlyBraceToken(String tokenContents, Object[] args) {
+        /*
+        Format:
+        ARG_NUMBER|FORMAT_DESCRIPTOR
+        ARG_NUMBER: The argument index to use
+        FORMAT_DESCRIPTOR: The way the argument should be formatted when inserted into the string
+
+        FORMAT_DESCRIPTOR format:
+        %FORMAT_STRING: Standard String.format() format string
+        #date[|DATE_FORMAT_STRING]: Formats the argument as a date, using the locale default short format if
+            DATE_FORMAT_STRING is not provided
+        #time[|TIME_FORMAT_STRING]: Formats the argument as a time, using the locale default short format if
+            TIME_FORMAT_STRING is not provided
+        #datetime[|DATE_TIME_FORMAT_STRING]: Formats the argument as a date and time, using the default short
+            format if DATE_TIME_FORMAT_STRING is not provided
+        (PLURALITY_ID,TEXT)[,more...]: A list of plurality matchers, using the given argument as the number.
+
+        Plurality rules are evaluated left to right; whichever rule matches first will be used
+         */
+        String[] splits = tokenContents.split("\\|", 2);
+        if (splits.length < 2) {
+            throw new IllegalArgumentException();
+        }
+        int argId;
+        try {
+            argId = Integer.parseInt(splits[0]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException();
+        }
+        final Object arg = args[argId];
+        String formatDescriptor = splits[1];
+        char first = formatDescriptor.charAt(0);
+        switch (first) {
+            case '%':
+                return handleStringFormat(formatDescriptor, arg);
+            case '#':
+                return handleDateTimeFormat(formatDescriptor, arg);
+            case '(':
+                return handlePluralityRules(formatDescriptor, arg);
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
+    private String handleStringFormat(String fmt, Object arg) {
+        return null;
+    }
+
+    private String handleDateTimeFormat(String fmt, Object arg) {
+        return null;
+    }
+
+    private String handlePluralityRules(String rules, Object arg) {
         return null;
     }
 
