@@ -142,126 +142,140 @@ public class LocalizerImpl implements Localizer {
         String working = s;
         //  StringBuilder for building the resultant for each pass
         StringBuilder builder = new StringBuilder();
-        //  StringBuilder for accumulating the contents of a token
-        StringBuilder tokenBuilder = new StringBuilder();
         //  Whether or not any substitution was made
         boolean substitution = true;
         while (repeatCount < maxRepeatCount && substitution) {
-            substitution = false;
             //  Resolve curly brace tokens first
             char[] chars = working.toCharArray();
-            boolean isEscaped = false;
-            boolean isInTag = false;
-            //  Track how many layers deep we are for curly brace tags - each pass will strip away the outermost layer
-            int curlyBraceDepth = 0;
-            for (char c : chars) {
-                if (isEscaped) {
-                    if (isInTag) {
-                        tokenBuilder.append(c);
-                    } else {
-                        builder.append(c);
-                    }
-                    isEscaped = false;
-                } else {
-                    switch (c) {
-                        case '\\':
-                            //  Escape next character
-                            isEscaped = true;
-                            break;
-                        case '{':
-                            //  Start curly brace tag
-                            isInTag = true;
-                            curlyBraceDepth++;
-                            //  Reset our token StringBuilder
-                            tokenBuilder.setLength(0);
-                            break;
-                        case '}':
-                            if (isInTag) {
-                                curlyBraceDepth--;
-                                if (curlyBraceDepth == 0) {
-                                    builder.append(processCurlyBraceToken(tokenBuilder.toString(), args));
-                                    isInTag = false;
-                                    substitution = true;
-                                    break;
-                                }
-                                //  FALL THROUGH if not outmoster layer of tag
-                            }
-                            //  FALL THROUGH if not in curly tag
-                        default:
-                            if (isInTag) {
-                                tokenBuilder.append(c);
-                            } else {
-                                builder.append(c);
-                            }
-                    }
-                }
-            }
-            if (isEscaped) {
-                //  Backslash at end of string, not fatal so we just insert it
-                builder.append('\\');
-            }
-            if (curlyBraceDepth > 0) {
-                //  There's an unclosed tag somewhere
-                return INVALID_FORMAT_STRING;
-            }
+            substitution = processCurlyTokens(builder, chars, args);
+
             //  Now resolve square bracket tags
-            //  Reset token related vars
-            working = builder.toString();
-            chars = working.toCharArray();
+            //  Reset
+            int len = builder.length();
+            if (len == chars.length) {
+                builder.getChars(0, len, chars, 0);
+            } else {
+                chars = builder.toString().toCharArray();
+            }
             builder.setLength(0);
-            tokenBuilder.setLength(0);
-            isEscaped = false;
-            isInTag = false;
-            for (char c : chars) {
-                if (isEscaped) {
-                    if (isInTag) {
-                        tokenBuilder.append(c);
-                    } else {
-                        builder.append(c);
-                    }
-                    isEscaped = false;
-                } else {
-                    switch (c) {
-                        case '\\':
-                            //  Escape next character
-                            isEscaped = true;
-                            break;
-                        case '[':
-                            //  Start square bracket tag
-                            isInTag = true;
-                            //  Reset our token StringBuilder
-                            tokenBuilder.setLength(0);
-                            break;
-                        case ']':
-                            if (isInTag) {
-                                builder.append(resolveSubkey(key, tokenBuilder.toString()));
-                                isInTag = false;
-                                substitution = true;
-                                break;
-                            }
-                            //  FALL THROUGH if not in square tag
-                        default:
-                            if (isInTag) {
-                                tokenBuilder.append(c);
-                            } else {
-                                builder.append(c);
-                            }
-                    }
-                }
-            }
-            if (isEscaped) {
-                //  Backslash at end of string, not fatal so we just insert it
-                builder.append('\\');
-            }
-            if (isInTag) {
-                //  There's an unclosed tag somewhere
-                return INVALID_FORMAT_STRING;
-            }
+            substitution |= processSquareBracketTokens(builder, chars,  key);
             //  Prep for next iteration
             working = builder.toString();
             repeatCount++;
         }
         return working;
+    }
+
+    private boolean processCurlyTokens(StringBuilder builder, char[] chars, Object[] args) {
+        boolean hasSubstitutionBeenMade = false;
+        StringBuilder tokenBuilder = new StringBuilder();
+        boolean isNextCharEscaped = false;
+        boolean isInTag = false;
+        int braceDepth = 0;
+        for (char c : chars) {
+            if (isNextCharEscaped) {
+                if (isInTag) {
+                    tokenBuilder.append(c);
+                } else {
+                    builder.append(c);
+                }
+                isNextCharEscaped = false;
+            } else {
+                switch (c) {
+                    case '\\':
+                        //  Escape next character
+                        isNextCharEscaped = true;
+                        break;
+                    case '{':
+                        //  Start curly brace tag
+                        isInTag = true;
+                        braceDepth++;
+                        //  Reset our token StringBuilder
+                        tokenBuilder.setLength(0);
+                        break;
+                    case '}':
+                        if (isInTag) {
+                            braceDepth--;
+                            if (braceDepth == 0) {
+                                builder.append(processCurlyBraceToken(tokenBuilder.toString(), args));
+                                isInTag = false;
+                                hasSubstitutionBeenMade = true;
+                                break;
+                            }
+                            //  FALL THROUGH if not outmoster layer of tag
+                        }
+                        //  FALL THROUGH if not in curly tag
+                    default:
+                        if (isInTag) {
+                            tokenBuilder.append(c);
+                        } else {
+                            builder.append(c);
+                        }
+                }
+            }
+        }
+        if (isNextCharEscaped) {
+            //  Backslash at end of string, not fatal so we just insert it
+            builder.append('\\');
+        }
+        if (braceDepth > 0) {
+            //  There's an unclosed tag somewhere
+            throw new IllegalArgumentException();
+        }
+        return hasSubstitutionBeenMade;
+    }
+
+    private boolean processSquareBracketTokens(StringBuilder builder, char[] chars, String key) {
+        boolean hasSubstitutionBeenMade = false;
+        StringBuilder tokenBuilder = new StringBuilder();
+        boolean isNextCharEscaped = false;
+        boolean isInTag = false;
+        for (char c : chars) {
+            if (isNextCharEscaped) {
+                if (isInTag) {
+                    tokenBuilder.append(c);
+                } else {
+                    builder.append(c);
+                }
+                isNextCharEscaped = false;
+            } else {
+                switch (c) {
+                    case '\\':
+                        //  Escape next character
+                        isNextCharEscaped = true;
+                        break;
+                    case '[':
+                        //  Start square bracket tag
+                        isInTag = true;
+                        //  Reset our token StringBuilder
+                        tokenBuilder.setLength(0);
+                        break;
+                    case ']':
+                        if (isInTag) {
+                            builder.append(resolveSubkey(key, tokenBuilder.toString()));
+                            isInTag = false;
+                            hasSubstitutionBeenMade = true;
+                            break;
+                        }
+                        //  FALL THROUGH if not in square tag
+                    default:
+                        if (isInTag) {
+                            tokenBuilder.append(c);
+                        } else {
+                            builder.append(c);
+                        }
+                }
+            }
+        }
+        if (isNextCharEscaped) {
+            //  Backslash at end of string, not fatal so we just insert it
+            builder.append('\\');
+        }
+        if (isInTag) {
+            //  There's an unclosed tag somewhere
+            throw new IllegalArgumentException();
+        }
+        return hasSubstitutionBeenMade;
     }
 
     private String processCurlyBraceToken(String tokenContents, Object[] args) {
