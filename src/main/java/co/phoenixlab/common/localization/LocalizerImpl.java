@@ -56,29 +56,17 @@ public class LocalizerImpl implements Localizer {
 
     @Override
     public String localize(String key) {
-        if (key == null) {
-            return LOCALE_STRING_NOT_FOUND;
-        }
-
-        return null;
+        return localize(key, new Object[0]);
     }
 
     @Override
     public String localize(String key, Object arg0) {
-        if (key == null) {
-            return LOCALE_STRING_NOT_FOUND;
-        }
-
-        return null;
+        return localize(key, new Object[] {arg0});
     }
 
     @Override
     public String localize(String key, Object arg0, Object arg1) {
-        if (key == null) {
-            return LOCALE_STRING_NOT_FOUND;
-        }
-
-        return null;
+        return localize(key, new Object[] {arg0, arg1});
     }
 
     @Override
