@@ -1,7 +1,5 @@
 package co.phoenixlab.common.localization;
 
-import co.phoenixlab.common.lang.ReverseListIterator;
-
 import java.util.*;
 
 import static co.phoenixlab.common.localization.Localizer.internalIsFlagBitSet;
@@ -11,13 +9,13 @@ public class LocalizerImpl implements Localizer {
 
     private final int maxRepeatCount;
     private final Locale locale;
-    private final List<LocaleStringProvider> providers;
+    private final LinkedList<LocaleStringProvider> providers;
     private final Collection<LocaleStringProvider> providersUnmodifiable;
 
     public LocalizerImpl(Locale locale) {
         Objects.requireNonNull(locale, "Locale cannot be null");
         this.locale = locale;
-        this.providers = new ArrayList<>();
+        this.providers = new LinkedList<>();
         this.providersUnmodifiable = Collections.unmodifiableCollection(providers);
         maxRepeatCount = Integer.getInteger("co.phoenixlab.localizer.fmt.limits.repeat", 8);
     }
@@ -113,9 +111,8 @@ public class LocalizerImpl implements Localizer {
      * @return The value associated with the given key, or null if no provider could provide the requested value
      */
     private String lookup(String key) {
-        ReverseListIterator<LocaleStringProvider> iterator = new ReverseListIterator<>(providers.listIterator());
-        for (LocaleStringProvider provider : iterator) {
-            String val = provider.get(key);
+        for (Iterator<LocaleStringProvider> iter = providers.descendingIterator(); iter.hasNext();) {
+            String val = iter.next().get(key);
             if (val != null) {
                 return val;
             }
