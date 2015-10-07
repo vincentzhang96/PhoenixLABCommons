@@ -131,6 +131,7 @@ public class LocalizerImpl implements Localizer {
         boolean substitution = true;
         while (repeatCount < maxRepeatCount && substitution) {
             try {
+                builder.setLength(0);
                 //  Resolve curly brace tokens first
                 char[] chars = working.toCharArray();
                 substitution = processCurlyTokens(builder, chars, args);
