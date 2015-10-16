@@ -325,6 +325,12 @@ public class LocalizerImpl implements Localizer {
     }
 
     private String handlePluralityRules(String rules, Object arg) {
+        //  To make things efficient we'll walk forward through the rules string
+        //  We take in the plurality ID first, see if it matches. If it does match, we'll then
+        //  return the associated text body
+        //  If it does not match, we skip ahead to the next rule and repeat
+        //  If no rules match, then we return NO_MATCHING_PLURAL
+        //  TODO
         return null;
     }
 
