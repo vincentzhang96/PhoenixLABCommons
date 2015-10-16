@@ -7,16 +7,22 @@ public interface Localizer {
 
     /**
      * Marker text returned by the localizer when a given key cannot be found.
+     * Default value is {@code ##NOT_FOUND##}, can be set via the system
+     * property {@code co.phoenixlab.localizer.notfound}
      */
-    String LOCALE_STRING_NOT_FOUND = System.getProperty("co.phoenixlab.localizer.notFound", "##NOT_FOUND##");
+    String LOCALE_STRING_NOT_FOUND = System.getProperty("co.phoenixlab.localizer.notfound", "##NOT_FOUND##");
 
     /**
-     * Marker text returned by the localizer if the format string is invalid
+     * Marker text returned by the localizer if the format string is invalid.
+     * Default value is {@code ##INVALID_FORMAT##}, can be set via the system
+     * property {@code co.phoenixlab.localizer.invalidformat}
      */
     String INVALID_FORMAT_STRING = System.getProperty("co.phoenixlab.localizer.invalidformat", "##INVALID_FORMAT##");
 
     /**
      * Marker text returned by the localizer if no plurality rule matched the given argument
+     * Default value is {@code ##NO_MATCHING_PLURAL##}, can be set via the system
+     * property {@code co.phoenixlab.localizer.nomatchingplural}
      */
     String NO_MATCHING_PLURAL = System.getProperty("co.phoenixlab.localizer.nomatchingplural",
             "##NO_MATCHING_PLURAL##");
