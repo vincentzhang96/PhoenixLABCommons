@@ -61,12 +61,12 @@ public class LocalizerImpl implements Localizer {
 
     @Override
     public String localize(String key, Object arg0) {
-        return localize(key, new Object[] {arg0});
+        return localize(key, new Object[]{arg0});
     }
 
     @Override
     public String localize(String key, Object arg0, Object arg1) {
-        return localize(key, new Object[] {arg0, arg1});
+        return localize(key, new Object[]{arg0, arg1});
     }
 
     @Override
@@ -99,7 +99,7 @@ public class LocalizerImpl implements Localizer {
      * @return The value associated with the given key, or null if no provider could provide the requested value
      */
     private String lookup(String key) {
-        for (Iterator<LocaleStringProvider> iter = providers.descendingIterator(); iter.hasNext();) {
+        for (Iterator<LocaleStringProvider> iter = providers.descendingIterator(); iter.hasNext(); ) {
             String val = iter.next().get(key);
             if (val != null) {
                 return val;
