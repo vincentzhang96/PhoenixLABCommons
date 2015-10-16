@@ -332,14 +332,18 @@ public class LocalizerImpl implements Localizer {
         if (tokenContents.length() == 0) {
             return LOCALE_STRING_NOT_FOUND;
         }
-        boolean isRelative = tokenContents.charAt(0) == '.';
+        boolean isRelative = tokenContents.charAt(0) == '.';    //  tokenContents.startsWith(".")
         String key;
         if (isRelative) {
             key = baseKey + tokenContents;
         } else {
             key = tokenContents;
         }
-        return Optional.ofNullable(lookup(key)).orElse(LOCALE_STRING_NOT_FOUND);
+        String ret = lookup(key);
+        if (ret != null) {
+            return ret;
+        }
+        return LOCALE_STRING_NOT_FOUND;
     }
 
     @Override
