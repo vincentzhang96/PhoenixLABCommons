@@ -283,7 +283,7 @@ public class LocalizerImpl implements Localizer {
             TIME_FORMAT_STRING is not provided
         #datetime[|DATE_TIME_FORMAT_STRING]: Formats the argument as a date and time, using the default short
             format if DATE_TIME_FORMAT_STRING is not provided
-        (PLURALITY_ID,TEXT)[,more...]: A list of plurality matchers, using the given argument as the number.
+        (PLURALITY_ID1,PLURALITY_ID2,...;TEXT)[,more...]: A list of plurality matchers, using the given argument as the number.
 
         Plurality rules are evaluated left to right; whichever rule matches first will be used
          */
