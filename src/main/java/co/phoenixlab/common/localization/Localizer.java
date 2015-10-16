@@ -11,7 +11,7 @@ public interface Localizer {
     String LOCALE_STRING_NOT_FOUND = System.getProperty("co.phoenixlab.localizer.notFound", "##NOT_FOUND##");
 
     /**
-     * Market text returned by the localizer if the format string is invalid
+     * Marker text returned by the localizer if the format string is invalid
      */
     String INVALID_FORMAT_STRING = System.getProperty("co.phoenixlab.localizer.invalidformat", "##INVALID_FORMAT##");
 
