@@ -15,6 +15,12 @@ public interface Localizer {
      */
     String INVALID_FORMAT_STRING = System.getProperty("co.phoenixlab.localizer.invalidformat", "##INVALID_FORMAT##");
 
+    /**
+     * Marker text returned by the localizer if no plurality rule matched the given argument
+     */
+    String NO_MATCHING_PLURAL = System.getProperty("co.phoenixlab.localizer.nomatchingplural",
+            "##NO_MATCHING_PLURAL##");
+
     String PREFIX_FLAG_BASE = "@# ";
     int PREFIX_FLAG_LENGTH = PREFIX_FLAG_BASE.length();
 
