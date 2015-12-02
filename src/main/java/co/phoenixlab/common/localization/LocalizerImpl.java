@@ -330,8 +330,93 @@ public class LocalizerImpl implements Localizer {
         //  return the associated text body
         //  If it does not match, we skip ahead to the next rule and repeat
         //  If no rules match, then we return NO_MATCHING_PLURAL
+        //  Example rule: (ONE;a potato),(ZERO,MANY;potatoes)
+        //  FooBar rule (assuming defined matchers): (FOUR+FIVE;foobar),(FOUR;foo),(FIVE;bar)
         //  TODO
+
+
+        char[] chars = rules.toCharArray();
+        StringBuilder builder = new StringBuilder();
+        int startIndex = 0;
+        do {
+            builder.setLength(0);
+            //  Read in block
+            int newIndex = readInPluralityRule(chars, startIndex, builder);
+            if (newIndex == startIndex) {
+                break;
+            }
+            startIndex = newIndex;
+            String rule = builder.toString();
+            if (rule.isEmpty()) {
+                continue;
+            }
+            //  Split at the semicolon, but only the first one we run into
+            //  We don't perform lookaround to exclude escaped semicolons since matcher names cannot include semicolons
+            String[] split = rule.split(";", 2);
+            if (split.length != 2) {
+                //  Bad rule - rules must have at least one matcher and text
+                continue;
+            }
+            String[] matchers = split[0].split(",");
+
+
+
+
+
+
+
+        } while (startIndex < chars.length);
+
         return null;
+    }
+
+    private int readInPluralityRule(char[] chars, int index, StringBuilder builder) {
+        //  Find opening paren (non escaped)
+        boolean escaped = false;
+        boolean foundOpen = false;
+        for (; index < chars.length; index++) {
+            char c = chars[index];
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+            if (c == '\\') {
+                escaped = true;
+                continue;
+            }
+            if (c == '(') {
+                foundOpen = true;
+                index++;    //  Skip the paren for inclusion
+                break;
+            }
+        }
+        if (!foundOpen) {
+            return index;
+        }
+        int startPos = index;
+        if (startPos >= chars.length) {
+            return index;
+        }
+        //  Find closing paren
+        escaped = false;
+        for(; index < chars.length; index++) {
+            char c = chars[index];
+            if (escaped)  {
+                escaped = false;
+                builder.append(c);
+                continue;
+            }
+            if (c == '\\') {
+                //  We still append since this may be in the body of the text, we'll unescape at the end
+                escaped = true;
+                builder.append(c);
+                continue;
+            }
+            if (c == ')') {
+                 break;
+            }
+        }
+        return index;
     }
 
     private String resolveSubkey(String baseKey, String tokenContents) {
