@@ -334,8 +334,14 @@ public class LocalizerImpl implements Localizer {
         //  If no rules match, then we return NO_MATCHING_PLURAL
         //  Example rule: (ONE;a potato),(ZERO,MANY;potatoes)
         //  FooBar rule (assuming defined matchers): (FOUR+FIVE;foobar),(FOUR;foo),(FIVE;bar)
+        //  Rules can be ANDed together with + to only match if BOTH rules match.
         //  TODO
 
+        //  First off, make sure what we have IS a number
+        if (!(arg instanceof Number)) {
+            throw new IllegalArgumentException();
+        }
+        Number number = (Number) arg;
 
         char[] chars = rules.toCharArray();
         StringBuilder builder = new StringBuilder();
@@ -361,16 +367,34 @@ public class LocalizerImpl implements Localizer {
             }
             //  Don't bother with commas either
             String[] matchers = split[0].split(",");
-
-
-
-
-
-
-
+            boolean match = false;
+            for (String matcher : matchers) {
+                LocalizerPluralRule pluralRule = null;
+                //  Fast path
+                if (!matcher.contains("+")) {
+                    pluralRule = pluralRuleMatchers.get(matcher);
+                } else {
+                    String[] sub = matcher.split("\\+");
+                    pluralRule = LocalizerPluralRule.TRUE();
+                    for (String s : sub) {
+                        LocalizerPluralRule r = pluralRuleMatchers.get(s);
+                        if (r != null) {
+                            pluralRule = pluralRule.and(r);
+                        }
+                    }
+                }
+                if (pluralRule != null) {
+                    match = pluralRule.test(number);
+                    if (match) {
+                        break;
+                    }
+                }
+            }
+            if (match) {
+                return split[1];
+            }
         } while (startIndex < chars.length);
-
-        return null;
+        return NO_MATCHING_PLURAL;
     }
 
     private int readInPluralityRule(char[] chars, int index, StringBuilder builder) {
@@ -410,9 +434,7 @@ public class LocalizerImpl implements Localizer {
                 continue;
             }
             if (c == '\\') {
-                //  We still append since this may be in the body of the text, we'll unescape at the end
                 escaped = true;
-                builder.append(c);
                 continue;
             }
             if (c == ')') {
