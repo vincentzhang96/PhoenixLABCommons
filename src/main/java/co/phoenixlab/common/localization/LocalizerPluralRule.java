@@ -11,6 +11,10 @@ public interface LocalizerPluralRule extends Predicate<Number> {
         return (t) -> test(t) && other.test(t);
     }
 
+    default LocalizerPluralRule negate() {
+        return t -> !test(t);
+    }
+
     static LocalizerPluralRule TRUE() {
         return number -> true;
     }
