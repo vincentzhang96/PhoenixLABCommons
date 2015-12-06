@@ -23,6 +23,12 @@ public class LocalizerImpl implements Localizer {
     }
 
     @Override
+    public void registerPluralityRules(Map<String, LocalizerPluralRule> rules) {
+        //  Normalize the name
+        rules.forEach((k, v) -> pluralRuleMatchers.put(k.toUpperCase(), v));
+    }
+
+    @Override
     public Locale getLocale() {
         return locale;
     }

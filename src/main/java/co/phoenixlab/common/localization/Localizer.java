@@ -2,6 +2,7 @@ package co.phoenixlab.common.localization;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 
 public interface Localizer {
 
@@ -79,6 +80,12 @@ public interface Localizer {
      * Unregisters all providers from this Localizer
      */
     void removeAllLocaleStringProviders();
+
+    /**
+     * Register the provided plurality rules to this Localizer
+     * @param rules A map of plurality rules. key: name, value: LocalizerPluralRule
+     */
+    void registerPluralityRules(Map<String, LocalizerPluralRule> rules);
 
     /**
      * Checks if a given key exists.
