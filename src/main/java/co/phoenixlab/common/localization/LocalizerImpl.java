@@ -348,7 +348,6 @@ public class LocalizerImpl implements Localizer {
             throw new IllegalArgumentException();
         }
         Number number = (Number) arg;
-
         char[] chars = rules.toCharArray();
         StringBuilder builder = new StringBuilder();
         int startIndex = 0;
@@ -450,6 +449,7 @@ public class LocalizerImpl implements Localizer {
             if (c == ')') {
                  break;
             }
+            builder.append(c);
         }
         return index;
     }
