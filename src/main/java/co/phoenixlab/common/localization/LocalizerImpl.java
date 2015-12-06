@@ -372,12 +372,12 @@ public class LocalizerImpl implements Localizer {
                 LocalizerPluralRule pluralRule = null;
                 //  Fast path
                 if (!matcher.contains("+")) {
-                    pluralRule = pluralRuleMatchers.get(matcher);
+                    pluralRule = getRule(matcher);
                 } else {
                     String[] sub = matcher.split("\\+");
                     pluralRule = LocalizerPluralRule.TRUE();
                     for (String s : sub) {
-                        LocalizerPluralRule r = pluralRuleMatchers.get(s);
+                        LocalizerPluralRule r = getRule(s);
                         if (r != null) {
                             pluralRule = pluralRule.and(r);
                         }
@@ -395,6 +395,10 @@ public class LocalizerImpl implements Localizer {
             }
         } while (startIndex < chars.length);
         return NO_MATCHING_PLURAL;
+    }
+
+    private LocalizerPluralRule getRule(String name) {
+        return pluralRuleMatchers.get(name.toUpperCase());
     }
 
     private int readInPluralityRule(char[] chars, int index, StringBuilder builder) {
