@@ -1,12 +1,13 @@
-package co.phoenixlab.common.number;
+package co.phoenixlab.common.lang.number;
 
+import co.phoenixlab.common.testutils.TestUtils;
 import org.junit.*;
 
-import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 import static org.junit.Assert.*;
 
-public class ParseIntTest {
+public class ParseLongTest {
 
     private static final String WHITESPACE;
 
@@ -19,36 +20,41 @@ public class ParseIntTest {
         WHITESPACE = new String(chars);
     }
 
+    @Test
+    public void testUtilityClass() throws Exception {
+        TestUtils.testIsUtilityClass(ParseLong.class);
+    }
+
     //  Test dec/hex picking
     @Test
     public void testParse_Dec() throws Exception {
-        int i = 123456;
-        String s = Integer.toString(i);
-        assertEquals(i, ParseInt.parse(s));
+        long i = 123456;
+        String s = Long.toString(i);
+        assertEquals(i, ParseLong.parse(s));
     }
 
     //  Test dec/hex picking
     @Test
     public void testParse_Hex() throws Exception {
-        int i = 0x123ABC;
-        String s = "0x" + Integer.toHexString(i);
-        assertEquals(i, ParseInt.parse(s));
+        long i = 0x123ABC;
+        String s = "0x" + Long.toHexString(i);
+        assertEquals(i, ParseLong.parse(s));
     }
 
     //  Test dec/hex dec trimming
     @Test
     public void testParse_DecTrim() throws Exception {
-        int i = 123456;
-        String s = WHITESPACE + Integer.toString(i) + WHITESPACE;
-        assertEquals(i, ParseInt.parse(s));
+        long i = 123456;
+        String s = WHITESPACE + Long.toString(i) + WHITESPACE;
+        assertEquals(i, ParseLong.parse(s));
     }
 
     //  Test dec/hex hex trimming
     @Test
     public void testParse_HexTrim() throws Exception {
-        int i = 0x123ABC;
-        String s = WHITESPACE + "0x" + Integer.toHexString(i) + WHITESPACE;
-        assertEquals(i, ParseInt.parse(s));
+        long i = 0x123ABC;
+        String s = WHITESPACE + "0x" + Long.toHexString(i) + WHITESPACE;
+        assertEquals(i, ParseLong.parse(s));
     }
 
     //  Invalid hex/dec handled in tests for parseDec0 and parseHex0
@@ -56,105 +62,111 @@ public class ParseIntTest {
     //  Test null reject
     @Test(expected = NumberFormatException.class)
     public void testParse_Null() throws Exception {
-        ParseInt.parse(null);
+        ParseLong.parse(null);
     }
 
     //  Test empty string reject
     @Test(expected = NumberFormatException.class)
     public void testParse_EmptyDec() throws Exception {
         String s = "";
-        ParseInt.parse(s);
+        ParseLong.parse(s);
     }
 
     //  Test missing hex digits reject
     @Test(expected = NumberFormatException.class)
     public void testParse_EmptyHex() throws Exception {
         String s = "0x";
-        ParseInt.parse(s);
+        ParseLong.parse(s);
     }
 
     @Test
     public void testParseDec() throws Exception {
-        int i = 123456;
-        String s = Integer.toString(i);
-        assertEquals(i, ParseInt.parseDec(s));
+        long i = 123456;
+        String s = Long.toString(i);
+        assertEquals(i, ParseLong.parseDec(s));
     }
 
     //  Test negative sign prefix
     @Test
     public void testParseDec_Negative() throws Exception {
-        int i = -123456;
-        String s = Integer.toString(i);
-        assertEquals(i, ParseInt.parseDec(s));
+        long i = -123456;
+        String s = Long.toString(i);
+        assertEquals(i, ParseLong.parseDec(s));
     }
 
     @Test
     public void testParseDec_MaxSigned() throws Exception {
-        int i = Integer.MAX_VALUE;
-        String s = Integer.toString(i);
-        assertEquals(i, ParseInt.parseDec(s));
+        long i = Long.MAX_VALUE;
+        String s = Long.toString(i);
+        assertEquals(i, ParseLong.parseDec(s));
     }
 
     @Test
     public void testParseDec_MaxUnsigned() throws Exception {
-        int i = 0xFFFFFFFF;
-        String s = "4294967295";
-        assertEquals(i, ParseInt.parseDec(s));
+        long i = 0xFFFFFFFF;
+        String s = "18446744073709551615";
+        assertEquals(i, ParseLong.parseDec(s));
     }
 
     //  For values larger than the unsigned max, the method shouldn't thrown an exception but it will return a
     //  garbage result
     @Test
     public void testParseDec_UnsignedOverflow() throws Exception {
-        String s = "4294967296";
-        ParseInt.parseDec(s);
+        String s = "18446744073709551616";
+        ParseLong.parseDec(s);
     }
 
     @Test
     public void testParseDec_MinSigned() throws Exception {
-        int i = Integer.MIN_VALUE;
-        String s = Integer.toString(i);
-        assertEquals(i, ParseInt.parseDec(s));
+        long i = Long.MIN_VALUE;
+        String s = Long.toString(i);
+        assertEquals(i, ParseLong.parseDec(s));
     }
 
     //  For values lower than the signed min, the method shouldn't thrown an exception but it will return a
     //  garbage result
     @Test
     public void testParseDec_MinSignedUnderflow() throws Exception {
-        String s = "-2147483649";
-        ParseInt.parseDec(s);
+        String s = "-9223372036854775809";
+        ParseLong.parseDec(s);
     }
 
     //  Test bad
     @Test(expected = NumberFormatException.class)
     public void testParseDec_Bad() throws Exception {
-        ParseInt.parseDec("12AB-**&1'");
+        ParseLong.parseDec("12AB-**&1'");
     }
 
     //  Test null
     @Test(expected = NumberFormatException.class)
     public void testParseDec_Null() throws Exception {
-        ParseInt.parseDec(null);
+        ParseLong.parseDec(null);
+    }
+
+    //  Test empty
+    @Test(expected = NumberFormatException.class)
+    public void testParseDec_Empty() throws Exception {
+        ParseLong.parseDec("");
     }
 
     //  Test positive sign prefix
     @Test
     public void testParseDec_Positive() throws Exception {
-        int i = 123456;
-        String s = "+" + Integer.toString(i);
-        assertEquals(i, ParseInt.parseDec(s));
+        long i = 123456;
+        String s = "+" + Long.toString(i);
+        assertEquals(i, ParseLong.parseDec(s));
     }
 
     //  Test negative sign inside
     @Test(expected = NumberFormatException.class)
     public void testParseDec_NegativeBad() throws Exception {
-        ParseInt.parseDec("-12-34");
+        ParseLong.parseDec("-12-34");
     }
 
     //  Test positive sign inside
     @Test(expected = NumberFormatException.class)
     public void testParseDec_PositiveBad() throws Exception {
-        ParseInt.parseDec("+12+34");
+        ParseLong.parseDec("+12+34");
     }
 
     //  parseDec0() is technically internal and makes no public guarantees besides declaring what it accepts.
@@ -162,104 +174,111 @@ public class ParseIntTest {
 
     @Test
     public void testParseHex() throws Exception {
-        int i = 123456;
-        String s = Integer.toHexString(i);
-        assertEquals(i, ParseInt.parseHex(s));
+        long i = 123456;
+        String s = Long.toHexString(i);
+        assertEquals(i, ParseLong.parseHex(s));
     }
 
     @Test
     public void testParseHexPrefixEquals() throws Exception {
-        int i = 123456;
-        String s = Integer.toHexString(i);
+        long i = 123456;
+        String s = Long.toHexString(i);
         String s1 = "0x" + s;
         String s2 = "0X" + s;
         //  Transitive property means we only have to test twice
-        assertEquals(ParseInt.parseHex(s), ParseInt.parseHex(s1));
-        assertEquals(ParseInt.parseHex(s1), ParseInt.parseHex(s2));
+        assertEquals(ParseLong.parseHex(s), ParseLong.parseHex(s1));
+        assertEquals(ParseLong.parseHex(s1), ParseLong.parseHex(s2));
     }
 
     @Test
     public void testParseHexMaxSigned() throws Exception {
-        int i = Integer.MAX_VALUE;
-        String s = "0x" + Integer.toHexString(i);
-        assertEquals(i, ParseInt.parseHex(s));
+        long i = Long.MAX_VALUE;
+        String s = "0x" + Long.toHexString(i);
+        assertEquals(i, ParseLong.parseHex(s));
     }
 
     @Test
     public void testParseHexMaxUnsigned() throws Exception {
-        int i = 0xFFFFFFFF;
-        String s = "0xFFFFFFFF";
-        assertEquals(i, ParseInt.parseHex(s));
+        long i = 0xFFFFFFFFFFFFFFFFL;
+        String s = "0xFFFFFFFFFFFFFFFF";
+        assertEquals(i, ParseLong.parseHex(s));
     }
 
     //  For values larger than the unsigned max, the method shouldn't thrown an exception but it will return a
     //  garbage result
     @Test
     public void testParseHexMaxUnsignedOverflow() throws Exception {
-        String s = "0x100000000";
-        ParseInt.parseHex(s);
+        String s = "0x10000000000000000";
+        ParseLong.parseHex(s);
     }
 
     //  Technically this is the same as MaxUnsigned
     @Test
     public void testParseHexMinSigned() throws Exception {
-        int i = Integer.MIN_VALUE;
-        String s = "0x" + Integer.toHexString(i);
-        assertEquals(i, ParseInt.parseHex(s));
+        long i = Long.MIN_VALUE;
+        String s = "0x" + Long.toHexString(i);
+        assertEquals(i, ParseLong.parseHex(s));
     }
 
     //  Test negative sign prefix reject (before prefix)
     @Test(expected = NumberFormatException.class)
     public void testParseHex_Negative1() throws Exception {
         String s = "-0x12AC";
-        ParseInt.parseHex(s);
+        ParseLong.parseHex(s);
     }
 
     //  Test negative sign prefix reject (after prefix)
     @Test(expected = NumberFormatException.class)
     public void testParseHex_Negative2() throws Exception {
         String s = "0x-12AC";
-        ParseInt.parseHex(s);
+        ParseLong.parseHex(s);
     }
 
     //  Test negative sign prefix reject (no prefix)
     @Test(expected = NumberFormatException.class)
     public void testParseHex_Negative3() throws Exception {
         String s = "-12AC";
-        ParseInt.parseHex(s);
+        ParseLong.parseHex(s);
     }
 
     //  Test bad
     @Test(expected = NumberFormatException.class)
     public void testParseHex_Bad() throws Exception {
-        ParseInt.parseHex("12AB-**&1'");
+        ParseLong.parseHex("12AB-**&1'");
     }
 
     //  Test null
     @Test(expected = NumberFormatException.class)
     public void testParseHex_Null() throws Exception {
-        ParseInt.parseHex(null);
+        ParseLong.parseHex(null);
     }
 
     //  Test positive sign prefix reject (before prefix)
     @Test(expected = NumberFormatException.class)
     public void testParseHex_Positive1() throws Exception {
         String s = "+0x12AB";
-        ParseInt.parseHex(s);
+        ParseLong.parseHex(s);
     }
 
     //  Test positive sign prefix reject (after prefix)
     @Test(expected = NumberFormatException.class)
     public void testParseHex_Positive2() throws Exception {
         String s = "0x+12AB";
-        ParseInt.parseHex(s);
+        ParseLong.parseHex(s);
     }
 
     //  Test positive sign prefix reject (no prefix)
     @Test(expected = NumberFormatException.class)
     public void testParseHex_Positive3() throws Exception {
         String s = "+12AB";
-        ParseInt.parseHex(s);
+        ParseLong.parseHex(s);
+    }
+
+    //  Test prefix with no value reject
+    @Test(expected = NumberFormatException.class)
+    public void testParseHex_PrefixNoValue() throws Exception {
+        String s = "0x";
+        ParseLong.parseHex(s);
     }
 
     //  parseHex0() is technically internal and makes no public guarantees besides declaring what it accepts.
@@ -267,162 +286,162 @@ public class ParseIntTest {
 
     @Test
     public void testParseOrDefaultDecOk() throws Exception {
-        int i = 12;
-        String s = Integer.toString(i);
+        long i = 12;
+        String s = Long.toString(i);
         int def = 14;
-        assertEquals(i, ParseInt.parseOrDefault(s, def));
+        assertEquals(i, ParseLong.parseOrDefault(s, def));
     }
 
     @Test
     public void testParseOrDefaultHexOk() throws Exception {
-        int i = 0x12;
-        String s = "0x" + Integer.toHexString(i);
+        long i = 0x12;
+        String s = "0x" + Long.toHexString(i);
         int def = 14;
-        assertEquals(i, ParseInt.parseOrDefault(s, def));
+        assertEquals(i, ParseLong.parseOrDefault(s, def));
     }
 
     @Test
     public void testParseOrDefaultDecDefault() throws Exception {
         String s = "abcd";
         int def = 14;
-        assertEquals(def, ParseInt.parseOrDefault(s, def));
+        assertEquals(def, ParseLong.parseOrDefault(s, def));
     }
 
     @Test
     public void testParseOrDefaultHexDefault() throws Exception {
         String s = "0xq12.g";
         int def = 14;
-        assertEquals(def, ParseInt.parseOrDefault(s, def));
+        assertEquals(def, ParseLong.parseOrDefault(s, def));
     }
 
     @Test
     public void testParseOrDefaultNullDefault() throws Exception {
         int def = 14;
-        assertEquals(def, ParseInt.parseOrDefault(null, def));
+        assertEquals(def, ParseLong.parseOrDefault(null, def));
     }
 
     @Test
     public void testParseDecOrDefaultOk() throws Exception {
-        int i = 12;
-        String s = Integer.toString(i);
+        long i = 12;
+        String s = Long.toString(i);
         int def = 14;
-        assertEquals(i, ParseInt.parseDecOrDefault(s, def));
+        assertEquals(i, ParseLong.parseDecOrDefault(s, def));
     }
 
     @Test
     public void testParseDecOrDefaultFail() throws Exception {
         String s = "abc";
         int def = 14;
-        assertEquals(def, ParseInt.parseDecOrDefault(s, def));
+        assertEquals(def, ParseLong.parseDecOrDefault(s, def));
     }
 
     @Test
     public void testParseDecOrDefaultNull() throws Exception {
         int def = 14;
-        assertEquals(def, ParseInt.parseDecOrDefault(null, def));
+        assertEquals(def, ParseLong.parseDecOrDefault(null, def));
     }
 
     @Test
     public void testParseHexOrDefaultOk() throws Exception {
-        int i = 0x12;
-        String s = "0x" + Integer.toHexString(i);
+        long i = 0x12;
+        String s = "0x" + Long.toHexString(i);
         int def = 14;
-        assertEquals(i, ParseInt.parseHexOrDefault(s, def));
+        assertEquals(i, ParseLong.parseHexOrDefault(s, def));
     }
 
     @Test
     public void testParseHexOrDefaultFail() throws Exception {
         String s = "aq12.g";
         int def = 14;
-        assertEquals(def, ParseInt.parseHexOrDefault(s, def));
+        assertEquals(def, ParseLong.parseHexOrDefault(s, def));
     }
 
     @Test
     public void testParseHexOrDefaultNull() throws Exception {
         int def = 14;
-        assertEquals(def, ParseInt.parseHexOrDefault(null, def));
+        assertEquals(def, ParseLong.parseHexOrDefault(null, def));
     }
 
 
     @Test
     public void testParseOptionalDecOk() throws Exception {
-        int i = 14;
-        String s = Integer.toString(i);
-        OptionalInt ret = ParseInt.parseOptional(s);
+        long i = 14;
+        String s = Long.toString(i);
+        OptionalLong ret = ParseLong.parseOptional(s);
         assertTrue(ret.isPresent());
-        assertEquals(i, ret.getAsInt());
+        assertEquals(i, ret.getAsLong());
     }
 
     @Test
     public void testParseOptionalHexOk() throws Exception {
-        int i = 0x14;
-        String s = "0x" + Integer.toHexString(i);
-        OptionalInt ret = ParseInt.parseOptional(s);
+        long i = 0x14;
+        String s = "0x" + Long.toHexString(i);
+        OptionalLong ret = ParseLong.parseOptional(s);
         assertTrue(ret.isPresent());
-        assertEquals(i, ret.getAsInt());
+        assertEquals(i, ret.getAsLong());
     }
 
     @Test
     public void testParseOptionalDecFail() throws Exception {
         String s = "12akjhsdr?";
-        OptionalInt ret = ParseInt.parseOptional(s);
+        OptionalLong ret = ParseLong.parseOptional(s);
         assertFalse(ret.isPresent());
     }
 
     @Test
     public void testParseOptionalHexFail() throws Exception {
         String s = "0x12akjhsdr?";
-        OptionalInt ret = ParseInt.parseOptional(s);
+        OptionalLong ret = ParseLong.parseOptional(s);
         assertFalse(ret.isPresent());
     }
 
     @Test
     public void testParseOptionalNullFail() throws Exception {
-        OptionalInt ret = ParseInt.parseOptional(null);
+        OptionalLong ret = ParseLong.parseOptional(null);
         assertFalse(ret.isPresent());
     }
 
     @Test
     public void testParseDecOptionalOk() throws Exception {
-        int i = 14;
-        String s = Integer.toString(i);
-        OptionalInt ret = ParseInt.parseDecOptional(s);
+        long i = 14;
+        String s = Long.toString(i);
+        OptionalLong ret = ParseLong.parseDecOptional(s);
         assertTrue(ret.isPresent());
-        assertEquals(i, ret.getAsInt());
+        assertEquals(i, ret.getAsLong());
     }
 
     @Test
     public void testParseDecOptionalFail() throws Exception {
         String s = "astg2148465klkast12hkls";
-        OptionalInt ret = ParseInt.parseDecOptional(s);
+        OptionalLong ret = ParseLong.parseDecOptional(s);
         assertFalse(ret.isPresent());
     }
 
     @Test
     public void testParseDecOptionalNull() throws Exception {
-        OptionalInt ret = ParseInt.parseDecOptional(null);
+        OptionalLong ret = ParseLong.parseDecOptional(null);
         assertFalse(ret.isPresent());
     }
 
     @Test
     public void testParseHexOptionalOk() throws Exception {
-        int i = 0x14;
-        String s = Integer.toHexString(i);
-        OptionalInt ret = ParseInt.parseHexOptional(s);
+        long i = 0x14;
+        String s = Long.toHexString(i);
+        OptionalLong ret = ParseLong.parseHexOptional(s);
         assertTrue(ret.isPresent());
-        assertEquals(i, ret.getAsInt());
+        assertEquals(i, ret.getAsLong());
     }
 
     @Test
     public void testParseHexOptionalFail() throws Exception {
         String s = "astg2148465klkast12hkls";
-        OptionalInt ret = ParseInt.parseHexOptional(s);
+        OptionalLong ret = ParseLong.parseHexOptional(s);
         assertFalse(ret.isPresent());
     }
 
     @Test
     public void testParseHexOptionalNull() throws Exception {
-        OptionalInt ret = ParseInt.parseHexOptional(null);
+        OptionalLong ret = ParseLong.parseHexOptional(null);
         assertFalse(ret.isPresent());
     }
 }

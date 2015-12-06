@@ -1,4 +1,4 @@
-package co.phoenixlab.common.number;
+package co.phoenixlab.common.lang.number;
 
 import java.util.OptionalLong;
 
@@ -7,7 +7,7 @@ import static java.util.OptionalLong.*;
 /**
  * Contains various methods for fast integer parsing of decimal and hexadecimal strings.
  */
-public class ParseLong {
+public final class ParseLong {
 
     private static final String HEX_PREFIX = "0X";
     private static final int HEX_PREFIX_LEN = HEX_PREFIX.length();

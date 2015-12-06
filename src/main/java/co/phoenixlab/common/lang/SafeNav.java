@@ -10,7 +10,7 @@ public class SafeNav<T> {
      */
     private T val;
     /**
-     * The last call number of {@link #next(Function)} or {@link #next(UnaryOperator)}
+     * The last call number of {@link #next(Function)}
      */
     private int lastNonNullDepth;
 
@@ -69,24 +69,6 @@ public class SafeNav<T> {
     }
 
     /**
-     * Applies the given {@code function} if the contained value is not null, or does nothing if it is null.
-     * <p>
-     * This is the unary type specialization of {@link #next(Function)}, which does not construct a new SafeNav
-     * instance in any case.
-     *
-     * @param function The function to apply to the contained value if present.
-     * @return A SafeNav<R> object containing the result of the function, or an empty SafeNav<R> object if the contained
-     * value was null.
-     */
-    public SafeNav<T> next(UnaryOperator<T> function) {
-        if (val != null) {
-            ++lastNonNullDepth;
-            val = function.apply(val);
-        }
-        return this;
-    }
-
-    /**
      * Gets the final result of the chain, or null if the contained value was initially null or any calls to
      * {@code next()} produced a null result.
      *
@@ -106,17 +88,6 @@ public class SafeNav<T> {
      * @return The result of calling the {@code function} with the final result, or null if the final result was null
      */
     public <R> R get(Function<T, R> function) {
-        return next(function).get();
-    }
-
-    /**
-     * Unary type specialization of {@link #get(Function)}
-     *
-     * @param function The function to apply
-     * @return The result of calling {@code function} with the final result, or null if the final result was null
-     * @see #get(Function)
-     */
-    public T get(UnaryOperator<T> function) {
         return next(function).get();
     }
 
