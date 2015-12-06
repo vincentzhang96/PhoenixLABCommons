@@ -11,12 +11,14 @@ public class LocalizerImpl implements Localizer {
     private final Locale locale;
     private final LinkedList<LocaleStringProvider> providers;
     private final Collection<LocaleStringProvider> providersUnmodifiable;
+    private final Map<String, LocalizerPluralRule> pluralRuleMatchers;
 
     public LocalizerImpl(Locale locale) {
         Objects.requireNonNull(locale, "Locale cannot be null");
         this.locale = locale;
         this.providers = new LinkedList<>();
         this.providersUnmodifiable = Collections.unmodifiableCollection(providers);
+        this.pluralRuleMatchers = new HashMap<>();
         maxRepeatCount = Integer.getInteger("co.phoenixlab.localizer.fmt.limits.repeat", 8);
     }
 
@@ -357,6 +359,7 @@ public class LocalizerImpl implements Localizer {
                 //  Bad rule - rules must have at least one matcher and text
                 continue;
             }
+            //  Don't bother with commas either
             String[] matchers = split[0].split(",");
 
 
