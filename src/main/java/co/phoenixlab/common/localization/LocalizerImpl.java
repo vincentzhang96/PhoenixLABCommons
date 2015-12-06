@@ -507,4 +507,31 @@ public class LocalizerImpl implements Localizer {
 
         return null;
     }
+
+    /**
+     * Returns a map of default plurality rules that can be added via {@link Localizer#registerPluralityRules(Map)}
+     * <br/>
+     * The default rules are:
+     * <ul>
+     *     <li> ZERO - (int) n == 0</li>
+     *     <li> ZERO_F - (double) n < {@link #EPSILON}</li>
+     *     <li> ONE - (int) n == 1</li>
+     *     <li> ONE_F - |(double) n - 1| < {@link #EPSILON}</li>
+     *     <li> MANY - n > 1</li>
+     *     <li> EN_PLURAL - n != 1 (English plural)</li>
+     * </ul>
+     */
+    public static Map<String, LocalizerPluralRule> defaultPluralityRules() {
+        Map<String, LocalizerPluralRule> defaultRules = new HashMap<>();
+        defaultRules.put("ZERO", n -> n.intValue() == 0);
+        defaultRules.put("ZERO_F", n -> n.doubleValue() < EPSILON);
+        defaultRules.put("ONE", n -> n.intValue() == 1);
+        LocalizerPluralRule oneFloat = n -> Math.abs(n.doubleValue() - 1D) < EPSILON;
+        defaultRules.put("ONE_F", oneFloat);
+        defaultRules.put("MANY", n -> n.doubleValue() > 1D);
+        defaultRules.put("EN_PLURAL", oneFloat.negate());
+        return defaultRules;
+    }
+
+    public static final double EPSILON = 0.00000001D;
 }
