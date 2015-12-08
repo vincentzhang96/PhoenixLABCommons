@@ -109,4 +109,13 @@ public class LocalizerTest {
         final String ret1 = localizer.localize(key, arg1);
         assertEquals(expected, ret1);
     }
+
+    @Test
+    public void testSquare() throws Exception {
+        strings.clear();
+        strings.put("potato.one", "WRONG");
+        strings.put("potato.two", "{0|%s} \\[potato.one] beep");
+        final String ret = localizer.localize("potato.two", "b");
+        assertEquals("b [potato.one] beep", ret);
+    }
 }

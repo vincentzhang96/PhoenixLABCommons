@@ -161,7 +161,23 @@ public class LocalizerImpl implements Localizer {
                 return INVALID_FORMAT_STRING;
             }
         }
-        return working;
+        //  Unescape escaped strings
+        builder.setLength(0);
+        char[] chars = working.toCharArray();
+        boolean escaped = false;
+        for (char c : chars) {
+            if (escaped) {
+                builder.append(c);
+                escaped = false;
+            } else {
+                if (c == '\\') {
+                    escaped = true;
+                } else {
+                    builder.append(c);
+                }
+            }
+        }
+        return builder.toString();
     }
 
     private boolean processCurlyTokens(StringBuilder builder, char[] chars, Object[] args) {
@@ -183,6 +199,12 @@ public class LocalizerImpl implements Localizer {
                     case '\\':
                         //  Escape next character
                         isNextCharEscaped = true;
+                        //  Add since we unescape characters on final pass
+                        if (isInTag) {
+                            tokenBuilder.append(c);
+                        } else {
+                            builder.append(c);
+                        }
                         break;
                     case '{':
                         //  Start curly brace tag
@@ -241,6 +263,12 @@ public class LocalizerImpl implements Localizer {
                     case '\\':
                         //  Escape next character
                         isNextCharEscaped = true;
+                        //  Add since we unescape characters on final pass
+                        if (isInTag) {
+                            tokenBuilder.append(c);
+                        } else {
+                            builder.append(c);
+                        }
                         break;
                     case '[':
                         //  Start square bracket tag
