@@ -472,6 +472,8 @@ public class LocalizerImpl implements Localizer {
             }
             if (c == '\\') {
                 escaped = true;
+                //  Still need to append
+                builder.append(c);
                 continue;
             }
             if (c == ')') {
