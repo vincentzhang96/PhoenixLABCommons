@@ -330,6 +330,9 @@ public class LocalizerImpl implements Localizer {
         int argId;
         try {
             argId = Integer.parseInt(splits[0]);
+            if (argId < 0 || argId >= args.length) {
+                throw new IllegalArgumentException();
+            }
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException();
         }
