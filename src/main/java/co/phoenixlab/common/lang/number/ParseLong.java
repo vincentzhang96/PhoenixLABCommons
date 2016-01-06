@@ -152,7 +152,7 @@ public final class ParseLong {
      * @return The parsed value from the String, or {@code def} if parsing failed
      * @see #parse(String)
      */
-    public static long parseOrDefault(String s, int def) {
+    public static long parseOrDefault(String s, long def) {
         try {
             return parse(s);
         } catch (Exception e) {
@@ -167,7 +167,7 @@ public final class ParseLong {
      * @return The parsed value from the String, or {@code def} if parsing failed
      * @see #parseDec(String)
      */
-    public static long parseDecOrDefault(String s, int def) {
+    public static long parseDecOrDefault(String s, long def) {
         try {
             return parseDec(s);
         } catch (Exception e) {
@@ -182,7 +182,7 @@ public final class ParseLong {
      * @return The parsed value from the String, or {@code def} if parsing failed
      * @see #parseHex(String)
      */
-    public static long parseHexOrDefault(String s, int def) {
+    public static long parseHexOrDefault(String s, long def) {
         try {
             return parseHex(s);
         } catch (Exception e) {
